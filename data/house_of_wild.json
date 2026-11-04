@@ -1,0 +1,302 @@
+{
+  "content": [
+    {
+      "id": "7b3371ad-09dd-40b8-94a4-a8647d15be43",
+      "slug": "a-quiet-tree",
+      "title": "A Quiet Tree",
+      "subtitle": "",
+      "content_type": "poem",
+      "raw_content": "First stanza line 1\nFirst stanza line 2",
+      "structured_body": [],
+      "excerpt": "First stanza line 1\nFirst stanza line 2",
+      "author_credit": "L.E. Daniels | DEFFA",
+      "alignment": "left",
+      "reading_time_minutes": 1,
+      "tags": [],
+      "status": "draft",
+      "is_homepage_featured": false,
+      "version": 3,
+      "updated_at": "2026-11-04T19:58:44.835Z",
+      "created_at": "2026-11-04T19:58:44.829Z"
+    },
+    {
+      "id": "poem-stones-verified",
+      "slug": "stones",
+      "title": "Stones",
+      "content_type": "poem",
+      "raw_content": "Diamond, Blue Sapphire, Ruby, Emerald;\nThe four most precious stones :\nPeridot, Turquoise, Moonstone, Garnet;\nFollowing close behind we are:\nFlint, Limestone, Dacite, Gneiss;\nWhat shall we say of ourselves?\nStones we all are, like humans different but alike",
+      "excerpt": "Diamond, Blue Sapphire, Ruby, Emerald; The four most precious stones : Peridot, Turquoise, Moonstone, Garnet...",
+      "author_credit": "L.E. Daniels | DEFFA",
+      "alignment": "left",
+      "reading_time_minutes": 1,
+      "tags": [
+        "Reflection",
+        "Humanity",
+        "Identity",
+        "Precious"
+      ],
+      "status": "published",
+      "published_at": "2026-11-04T19:57:26.494Z",
+      "is_homepage_featured": true,
+      "seo_title": "Stones — Poem by L.E. Daniels | DEFFA",
+      "seo_description": "Stones we all are, like humans different but alike. A poem by L.E. Daniels | DEFFA from House of Wild Ink.",
+      "version": 1,
+      "updated_at": "2026-11-04T19:57:26.496Z",
+      "created_at": "2026-11-04T19:57:26.496Z"
+    },
+    {
+      "id": "drama-threshold-draft",
+      "slug": "at-the-threshold",
+      "title": "At the Threshold",
+      "subtitle": "A short drama in one room",
+      "content_type": "short_drama",
+      "raw_content": "SCENE I: THE WRITING ROOM — DUSK\n\n(A tall arched window reveals rain falling softly against old brick. A desk of dark cedar holds an inkwell and loose parchment.)\n\nMARA\n(Standing by the window, without turning)\nYou always leave the door ajar. As if a sentence might escape.\n\nKAI\n(Seated at the desk, dipping a nib into dark ink)\nSentences do escape, Mara. Especially the ones we never meant to say aloud.\n\nMARA\n(Turning slowly)\nAnd what will you do when this one finds its reader?\n\nKAI\nListen for the echo.",
+      "structured_body": [
+        {
+          "type": "scene_heading",
+          "text": "SCENE I: THE WRITING ROOM — DUSK"
+        },
+        {
+          "type": "stage_direction",
+          "text": "A tall arched window reveals rain falling softly against old brick. A desk of dark cedar holds an inkwell and loose parchment."
+        },
+        {
+          "type": "character",
+          "text": "MARA"
+        },
+        {
+          "type": "stage_direction",
+          "text": "Standing by the window, without turning"
+        },
+        {
+          "type": "dialogue",
+          "text": "You always leave the door ajar. As if a sentence might escape."
+        },
+        {
+          "type": "character",
+          "text": "KAI"
+        },
+        {
+          "type": "stage_direction",
+          "text": "Seated at the desk, dipping a nib into dark ink"
+        },
+        {
+          "type": "dialogue",
+          "text": "Sentences do escape, Mara. Especially the ones we never meant to say aloud."
+        },
+        {
+          "type": "character",
+          "text": "MARA"
+        },
+        {
+          "type": "stage_direction",
+          "text": "Turning slowly"
+        },
+        {
+          "type": "dialogue",
+          "text": "And what will you do when this one finds its reader?"
+        },
+        {
+          "type": "character",
+          "text": "KAI"
+        },
+        {
+          "type": "dialogue",
+          "text": "Listen for the echo."
+        }
+      ],
+      "excerpt": "You always leave the door ajar. As if a sentence might escape. Sentences do escape, Mara...",
+      "author_credit": "Linda Emefa Daniels",
+      "alignment": "left",
+      "reading_time_minutes": 2,
+      "tags": [
+        "Drama",
+        "Dialogue",
+        "The Threshold"
+      ],
+      "status": "published",
+      "published_at": "2026-11-04T19:57:26.496Z",
+      "is_homepage_featured": true,
+      "seo_title": "At the Threshold — Short Drama by Linda Emefa Daniels",
+      "seo_description": "A short drama in one room exploring the unspoken words that shape our lives.",
+      "version": 1,
+      "updated_at": "2026-11-04T19:57:26.496Z",
+      "created_at": "2026-11-04T19:57:26.496Z"
+    }
+  ],
+  "collections": [
+    {
+      "id": "coll-earth-and-ink",
+      "slug": "earth-and-ink",
+      "title": "Earth and Ink",
+      "subtitle": "Reflections on humanity and quiet endurance",
+      "description": "A selection of poems and dramatic reflections examining the stones we gather and the thresholds we cross.",
+      "curator_note": "Curated for the inaugural opening of House of Wild Ink.",
+      "is_featured": true,
+      "is_public": true,
+      "status": "published",
+      "published_at": "2026-11-04T19:57:26.497Z",
+      "sort_order": 1,
+      "item_ids": [
+        "poem-stones-verified",
+        "drama-threshold-draft"
+      ],
+      "created_at": "2026-11-04T19:57:26.497Z",
+      "updated_at": "2026-11-04T19:57:26.497Z"
+    }
+  ],
+  "people": [
+    {
+      "id": "profile-linda-daniels",
+      "slug": "linda-emefa-daniels",
+      "display_name": "Linda Emefa Daniels",
+      "short_bio": "Writer and creator of House of Wild Ink. L.E. Daniels | DEFFA.",
+      "full_bio": "I write from experiences, observations, my faith, what I hope for and the quiet and loud conversations of life. But somewhere between my story and yours, I find that emotions meet. So when I put pen to paper, I may begin with my story, but sometimes, you find yours in it too. That is why I don’t only write my stories. I write our stories. 🌸 — L.E. Daniels | DEFFA.",
+      "roles": [
+        "Author",
+        "Founder"
+      ],
+      "links": {},
+      "selected_work_ids": [
+        "poem-stones-verified",
+        "drama-threshold-draft"
+      ],
+      "is_public": true,
+      "sort_order": 1,
+      "status": "published",
+      "created_at": "2026-11-04T19:57:26.496Z",
+      "updated_at": "2026-11-04T19:57:26.496Z"
+    }
+  ],
+  "media": [],
+  "revisions": [
+    {
+      "id": "f3c4e535-c770-4d5c-b1f6-d79bbdc040f5",
+      "item_id": "7b3371ad-09dd-40b8-94a4-a8647d15be43",
+      "item_type": "poem",
+      "version": 2,
+      "change_summary": "Pre-restore snapshot before restoring v1",
+      "snapshot": {
+        "id": "7b3371ad-09dd-40b8-94a4-a8647d15be43",
+        "slug": "a-quiet-tree",
+        "title": "A Quiet Tree (Revised)",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "Revised stanza line 1\nRevised stanza line 2",
+        "structured_body": [],
+        "excerpt": "First stanza line 1\nFirst stanza line 2",
+        "author_credit": "L.E. Daniels | DEFFA",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "status": "published",
+        "is_homepage_featured": false,
+        "version": 2,
+        "updated_at": "2026-11-04T19:58:44.833Z",
+        "created_at": "2026-11-04T19:58:44.829Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-04T19:58:44.835Z"
+    },
+    {
+      "id": "272fefc1-67bd-4f73-a77a-48df86f43516",
+      "item_id": "7b3371ad-09dd-40b8-94a4-a8647d15be43",
+      "item_type": "poem",
+      "version": 1,
+      "change_summary": "Updated: A Quiet Tree (Revised)",
+      "snapshot": {
+        "id": "7b3371ad-09dd-40b8-94a4-a8647d15be43",
+        "slug": "a-quiet-tree",
+        "title": "A Quiet Tree",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "First stanza line 1\nFirst stanza line 2",
+        "structured_body": [],
+        "excerpt": "First stanza line 1\nFirst stanza line 2",
+        "author_credit": "L.E. Daniels | DEFFA",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "status": "draft",
+        "is_homepage_featured": false,
+        "version": 1,
+        "updated_at": "2026-11-04T19:58:44.829Z",
+        "created_at": "2026-11-04T19:58:44.829Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-04T19:58:44.833Z"
+    }
+  ],
+  "analytics": [
+    {
+      "id": "stat-init-1",
+      "metric_date": "2026-11-04",
+      "path": "/poems/stones",
+      "content_type": "poem",
+      "page_views": 43,
+      "engaged_reads": 37,
+      "share_events": 9
+    }
+  ],
+  "subscribers": [
+    {
+      "id": "022cd37d-2559-4f55-9f81-aec6874413cc",
+      "email": "reader@testliterary.org",
+      "consent_given": true,
+      "source_page": "/poems/stones",
+      "is_active": true,
+      "subscribed_at": "2026-11-04T19:58:44.838Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "bdce9e27-9516-44fb-a281-ec4740089b97",
+      "sender_name": "Eleni Vance",
+      "sender_email": "eleni@press.org",
+      "inquiry_category": "Literary Representation",
+      "message": "Inquiry regarding collection rights.",
+      "is_read": false,
+      "created_at": "2026-11-04T19:58:44.839Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "user-owner-linda",
+      "email": "linda@houseofwildink.com",
+      "name": "Linda Emefa Daniels",
+      "role": "Owner",
+      "is_active": true,
+      "created_at": "2026-11-04T19:57:26.497Z"
+    }
+  ],
+  "settings": {
+    "featured_poem_id": "poem-stones-verified",
+    "featured_story_id": "drama-threshold-draft",
+    "notebook_quotes": [
+      {
+        "id": "quote-1",
+        "quote": "Somewhere between my story and yours, I find that emotions meet. That is why I don’t only write my stories. I write our stories.",
+        "source": "L.E. Daniels | DEFFA",
+        "note": "From the Author’s Notebook"
+      },
+      {
+        "id": "quote-2",
+        "quote": "Stones we all are, like humans different but alike.",
+        "source": "Stones",
+        "note": "Poetic reflection"
+      },
+      {
+        "id": "quote-3",
+        "quote": "A home for stories that refuse to stay quiet.",
+        "source": "House of Wild Ink",
+        "note": "Foundational Brand Thesis"
+      }
+    ],
+    "about_linda_statement": "I write from experiences, observations, my faith, what I hope for and the quiet and loud conversations of life. But somewhere between my story and yours, I find that emotions meet. So when I put pen to paper, I may begin with my story, but sometimes, you find yours in it too. That is why I don’t only write my stories. I write our stories. 🌸 — L.E. Daniels | DEFFA.",
+    "about_linda_short_bio": "Writer and creator of House of Wild Ink. Author under Linda Emefa Daniels and L.E. Daniels | DEFFA.",
+    "owner_access_key_hash": "29b6d7faf2381a48767160f5b4073aa7be54b0dd6b5a010a568d6fe7e651f69ea2b4053426cdedcbdd433f9e7c6bc50ae8cd91d7f25ee8a3f0bf1088988170e1",
+    "owner_access_key_salt": "5fc6d97c2ea2eb8e10d19b74cc7a3aa8611929a23657ca031384aaa3ffdaf2d0",
+    "last_key_rotation": "2026-11-04T19:57:26.497Z"
+  },
+  "activeSessions": []
+}

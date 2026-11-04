@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+  --brand-forest: #182C25;
+  --brand-parchment: #F7F4EE;
+  --brand-cream: #FAF8F5;
+  --brand-coral: #C85A46;
+  --brand-ink: #121614;
+  --brand-gold: #C5A059;
+  --brand-gold-light: #DFC182;
+  --brand-muted: #64746E;
+
+  --font-display: "Cinzel", "Playfair Display", "Georgia", serif;
+  --font-reading: "Newsreader", "EB Garamond", "Georgia", serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@theme inline {
+  --color-brand-forest: var(--brand-forest);
+  --color-brand-parchment: var(--brand-parchment);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-coral: var(--brand-coral);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-light: var(--brand-gold-light);
+  --color-brand-muted: var(--brand-muted);
+
+  --font-display: var(--font-display);
+  --font-reading: var(--font-reading);
+  --font-sans: var(--font-sans);
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--brand-parchment);
+  color: var(--brand-ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Editorial Typography Helpers */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-reading {
+  font-family: var(--font-reading);
+}
+
+/* Custom Poetry Whitespace Engine: Strict zero-loss formatting */
+.poetry-content {
+  font-family: var(--font-reading);
+  white-space: pre-wrap;
+  word-break: break-word;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  line-height: 1.85;
+}
+
+/* Short Drama Layout Helpers */
+.drama-scene-heading {
+  font-family: var(--font-display);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.drama-character {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  color: var(--brand-forest);
+  margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.drama-direction {
+  font-style: italic;
+  color: #4a5c54;
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.drama-dialogue {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Accessible visible focus ring */
+*:focus-visible {
+  outline: 2px solid var(--brand-coral);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: rgba(197, 160, 89, 0.35);
+  color: var(--brand-ink);
+}

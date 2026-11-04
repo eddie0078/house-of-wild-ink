@@ -41,7 +41,7 @@ export default function InkRoomGatePage() {
       }
 
       // Success: proceed to Layer 2 Identity Check
-      router.push("/ink-room/login");
+      window.location.href = "/ink-room/login";
     } catch (err: any) {
       setStatus("error");
       setErrorMessage("Network or connection error. Please try again.");

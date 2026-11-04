@@ -260,6 +260,7 @@ class Database {
 
   // --- Content Items ---
   getContentItems(filter?: { type?: string; status?: string; collectionId?: string }): ContentItem[] {
+    this.data = this.load();
     let items = [...this.data.content];
     if (filter?.type) {
       items = items.filter((i) => i.content_type === filter.type);
@@ -356,6 +357,7 @@ class Database {
 
   // --- Collections ---
   getCollections(publicOnly = false): Collection[] {
+    this.data = this.load();
     let colls = [...this.data.collections];
     if (publicOnly) {
       colls = colls.filter((c) => c.is_public && c.status === "published");
@@ -405,6 +407,7 @@ class Database {
 
   // --- People & Profiles ---
   getPeople(publicOnly = false): PersonProfile[] {
+    this.data = this.load();
     let p = [...this.data.people];
     if (publicOnly) {
       p = p.filter((x) => x.is_public && x.status === "published");
@@ -454,10 +457,12 @@ class Database {
 
   // --- Media Assets ---
   getMedia(): MediaAsset[] {
+    this.data = this.load();
     return [...this.data.media];
   }
 
   getMediaById(id?: string): MediaAsset | undefined {
+    this.data = this.load();
     if (!id) return undefined;
     return this.data.media.find((m) => m.id === id);
   }
@@ -524,6 +529,7 @@ class Database {
 
   // --- Site Settings & Security ---
   getSettings(): SiteSettings {
+    this.data = this.load();
     return { ...this.data.settings };
   }
 
@@ -551,6 +557,7 @@ class Database {
   }
 
   getUserByEmail(email: string): UserAccount | undefined {
+    this.data = this.load();
     return this.data.users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.is_active);
   }
 
@@ -585,6 +592,7 @@ class Database {
   }
 
   validateSession(token: string): { email: string; role: string } | null {
+    this.data = this.load();
     const now = Date.now();
     const session = this.data.activeSessions.find((s) => s.token === token && s.expiresAt > now);
     if (!session) return null;

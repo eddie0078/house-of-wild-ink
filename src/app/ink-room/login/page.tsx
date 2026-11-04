@@ -31,7 +31,7 @@ export default function InkRoomLoginPage() {
       }
 
       // Successful authorization: Enter Ink Room Dashboard
-      router.push("/ink-room");
+      window.location.href = "/ink-room";
     } catch (err: any) {
       setStatus("error");
       setErrorMessage("Network error during identity verification.");

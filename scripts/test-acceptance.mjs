@@ -116,6 +116,31 @@ const unread = db.getMessages().find(m => m.id === message.id);
 assert.strictEqual(unread.is_read, false, "New contact message must be stored as unread");
 console.log("✓ TEST 7 PASSED: First-party newsletter roll and contact inbox verified.\n");
 
+// TEST 8: Audio Stories with YouTube Link & Representative Artwork
+console.log("TEST 8: Testing Audio Stories, YouTube links, and Artwork...");
+const audioItems = db.getContentItems({ type: "audio_story" });
+assert.ok(audioItems.length > 0, "At least one audio story must exist in database");
+const firstGarden = audioItems.find(a => a.slug === "the-first-garden");
+assert.ok(firstGarden, "Seeded audio story 'The First Garden' must exist");
+assert.ok(firstGarden.youtube_url?.startsWith("https://www.youtube.com"), "Audio story must link to valid YouTube URL");
+assert.ok(firstGarden.cover_image_url, "Audio story must have representative artwork");
+assert.strictEqual(firstGarden.narrator_credit, "Linda Emefa Daniels", "Narrator credit must be Linda Emefa Daniels");
+console.log("✓ TEST 8 PASSED: Audio story YouTube linking and representative artwork verified.\n");
+
+// TEST 9: Essays & Author Linda's Official Portrait Assets
+console.log("TEST 9: Testing Essays Category and Author Portrait Registration...");
+const essays = db.getContentItems({ type: "essay" });
+assert.ok(essays.length > 0, "At least one essay must exist in database");
+const firstEssay = essays.find(e => e.slug === "on-stories-that-refuse-to-stay-quiet");
+assert.ok(firstEssay, "Seeded essay must exist");
+assert.strictEqual(firstEssay.author_credit, "L.E. Daniels | DEFFA", "Essay author credit must be L.E. Daniels | DEFFA");
+
+const mediaAssets = db.getMedia();
+const portraitAsset = mediaAssets.find(m => m.id === "media-linda-portrait");
+assert.ok(portraitAsset, "Linda's official portrait must be registered in media library");
+assert.strictEqual(portraitAsset.storage_url, "/images/linda-emefa-daniels.jpg", "Portrait storage URL must resolve to /images/linda-emefa-daniels.jpg");
+console.log("✓ TEST 9 PASSED: Essays and Author Portrait assets verified.\n");
+
 console.log("=================================================");
-console.log("ALL 7 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
+console.log("ALL 9 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
 console.log("=================================================");

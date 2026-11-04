@@ -1,4 +1,4 @@
-export type ContentType = "poem" | "story" | "short_drama" | "essay" | "reflection";
+export type ContentType = "poem" | "story" | "short_drama" | "essay" | "reflection" | "article" | "audio_story";
 
 export type ContentStatus = "draft" | "scheduled" | "published" | "archived";
 
@@ -53,6 +53,10 @@ export interface ContentItem {
   seo_title?: string;
   seo_description?: string;
   cover_media_id?: string;
+  cover_image_url?: string;
+  youtube_url?: string;
+  audio_duration?: string;
+  narrator_credit?: string;
   social_media_id?: string;
   author_note?: string;
   version: number;
@@ -102,7 +106,7 @@ export interface PersonProfile {
 export interface Revision {
   id: string;
   item_id: string;
-  item_type: "poem" | "story" | "collection" | "profile" | "settings";
+  item_type: "poem" | "story" | "collection" | "profile" | "settings" | "essay" | "audio_story";
   version: number;
   change_summary: string;
   snapshot: any;
@@ -158,6 +162,8 @@ export interface NotebookQuote {
 export interface SiteSettings {
   featured_poem_id?: string;
   featured_story_id?: string;
+  featured_audio_id?: string;
+  featured_essay_id?: string;
   notebook_quotes: NotebookQuote[];
   about_linda_statement: string;
   about_linda_short_bio: string;

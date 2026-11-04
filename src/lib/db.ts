@@ -154,6 +154,10 @@ Listen for the echo.`,
   const initialSettings: SiteSettings = {
     featured_poem_id: stonesPoemId,
     featured_story_id: "drama-threshold-draft",
+    featured_audio_id: "audio-first-garden",
+    featured_essay_id: "essay-stories-refuse-to-stay-quiet",
+    about_linda_portrait_id: "media-linda-portrait",
+    press_photo_url: "/images/linda-emefa-daniels.jpg",
     notebook_quotes: [
       {
         id: "quote-1",
@@ -231,7 +235,8 @@ class Database {
       }
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, "utf-8");
-        return JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        return this.ensureDefaults(parsed);
       }
     } catch (e) {
       console.error("Failed to load db, seeding defaults:", e);
@@ -239,6 +244,107 @@ class Database {
     const initial = getInitialSeed();
     this.saveDirect(initial);
     return initial;
+  }
+
+  private ensureDefaults(data: DatabaseSchema): DatabaseSchema {
+    let changed = false;
+    if (!data.media) data.media = [];
+    if (!data.media.some((m) => m.id === "media-linda-portrait")) {
+      data.media.push({
+        id: "media-linda-portrait",
+        filename: "linda-emefa-daniels.jpg",
+        storage_url: "/images/linda-emefa-daniels.jpg",
+        mime_type: "image/jpeg",
+        file_size_bytes: 842100,
+        alt_text: "Linda Emefa Daniels, author and creator of House of Wild Ink",
+        caption: "Author Linda Emefa Daniels (L.E. Daniels | DEFFA)",
+        credit: "House of Wild Ink",
+        source: "Author Upload",
+        focal_point: { x: 0.5, y: 0.35 },
+        layout_suitability: ["portrait", "cover", "inline"],
+        created_at: new Date().toISOString(),
+      });
+      changed = true;
+    }
+    if (!data.content.some((c) => c.id === "audio-first-garden")) {
+      data.content.push({
+        id: "audio-first-garden",
+        slug: "the-first-garden",
+        title: "The First Garden",
+        subtitle: "An audio story on remembrance and quiet faith",
+        content_type: "audio_story",
+        raw_content: `In the first garden, nothing asked to be explained. Every green shoot, every damp petal in the morning sun, simply existed under the light.\n\nWe forget that waiting is also an act of faith. When the seasons turn sharp, we look for words that can steady us. This reading was recorded in the quiet hours of dusk, reflecting on where roots take hold when the ground feels unfamiliar.`,
+        excerpt: "An audio reflection on remembrance, faith, and quiet roots. Recorded in the quiet hours of dusk.",
+        author_credit: "Linda Emefa Daniels",
+        narrator_credit: "Linda Emefa Daniels",
+        audio_duration: "8:45 min",
+        youtube_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        cover_image_url: "/images/linda-emefa-daniels.jpg",
+        alignment: "left",
+        reading_time_minutes: 4,
+        tags: ["Audio Story", "Faith", "Remembrance", "Spoken Word"],
+        status: "published",
+        published_at: new Date().toISOString(),
+        is_homepage_featured: true,
+        seo_title: "The First Garden — Audio Story by Linda Emefa Daniels",
+        seo_description: "An audio story on remembrance and quiet faith narrated by Linda Emefa Daniels.",
+        version: 1,
+        updated_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      });
+      changed = true;
+    }
+    if (!data.content.some((c) => c.id === "essay-stories-refuse-to-stay-quiet")) {
+      data.content.push({
+        id: "essay-stories-refuse-to-stay-quiet",
+        slug: "on-stories-that-refuse-to-stay-quiet",
+        title: "On Stories That Refuse to Stay Quiet",
+        subtitle: "An introductory essay on voice, faith, and shared humanity",
+        content_type: "essay",
+        raw_content: `There is a particular kind of silence that precedes an honest sentence. It is not the silence of having nothing to say, but rather the quiet courage of deciding to say what has waited in the dark for too long.\n\nI have learned that when we write from our deepest observations—from our faith, our quiet ache, our sudden joys—we rarely write alone. Between my private memory and your living heart, emotions meet. The circumstance of the story belongs to one person, but the feeling belongs to everyone who has ever walked through the door of another morning.\n\nThat is why this house exists. House of Wild Ink is built for the sentences that refuse to stay quiet in drawers, for the poems that demand to be recited against the noise of the day, and for the reflections that remind us that though we are all different stones, we are shaped by the same quiet earth.`,
+        excerpt: "There is a particular kind of silence that precedes an honest sentence. It is not the silence of having nothing to say, but rather the quiet courage...",
+        author_credit: "L.E. Daniels | DEFFA",
+        alignment: "left",
+        reading_time_minutes: 3,
+        tags: ["Essay", "Writing", "Faith", "Voice"],
+        status: "published",
+        published_at: new Date().toISOString(),
+        is_homepage_featured: true,
+        seo_title: "On Stories That Refuse to Stay Quiet — Essay by L.E. Daniels | DEFFA",
+        seo_description: "An essay on voice, faith, and shared humanity by L.E. Daniels | DEFFA.",
+        version: 1,
+        updated_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      });
+      changed = true;
+    }
+    const linda = data.people.find((p) => p.id === "profile-linda-daniels");
+    if (linda && !linda.portrait_media_id) {
+      linda.portrait_media_id = "media-linda-portrait";
+      changed = true;
+    }
+    if (data.settings) {
+      if (!data.settings.featured_audio_id) {
+        data.settings.featured_audio_id = "audio-first-garden";
+        changed = true;
+      }
+      if (!data.settings.featured_essay_id) {
+        data.settings.featured_essay_id = "essay-stories-refuse-to-stay-quiet";
+        changed = true;
+      }
+      if (!data.settings.about_linda_portrait_id) {
+        data.settings.about_linda_portrait_id = "media-linda-portrait";
+        changed = true;
+      }
+      if (!data.settings.press_photo_url) {
+        data.settings.press_photo_url = "/images/linda-emefa-daniels.jpg";
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.saveDirect(data);
+    }
+    return data;
   }
 
   private saveDirect(data: DatabaseSchema) {
@@ -296,7 +402,7 @@ class Database {
       this.data.revisions.unshift({
         id: crypto.randomUUID(),
         item_id: existing.id,
-        item_type: existing.content_type === "poem" ? "poem" : "story",
+        item_type: (["poem", "story", "essay", "audio_story"].includes(existing.content_type) ? existing.content_type : "story") as any,
         version: existing.version,
         change_summary: `Updated: ${item.title || existing.title}`,
         snapshot: existing,
@@ -334,6 +440,10 @@ class Database {
         seo_title: item.seo_title,
         seo_description: item.seo_description,
         cover_media_id: item.cover_media_id,
+        cover_image_url: item.cover_image_url,
+        youtube_url: item.youtube_url,
+        audio_duration: item.audio_duration,
+        narrator_credit: item.narrator_credit,
         author_note: item.author_note,
         version: 1,
         updated_at: now,
@@ -509,7 +619,7 @@ class Database {
     this.data.revisions.unshift({
       id: crypto.randomUUID(),
       item_id: currentItem.id,
-      item_type: currentItem.content_type === "poem" ? "poem" : "story",
+      item_type: (["poem", "story", "essay", "audio_story"].includes(currentItem.content_type) ? currentItem.content_type : "story") as any,
       version: currentItem.version,
       change_summary: `Pre-restore snapshot before restoring v${rev.version}`,
       snapshot: currentItem,

@@ -30,6 +30,8 @@ export function Navigation() {
     { label: "Home", href: "/" },
     { label: "Poems", href: "/poems" },
     { label: "Stories", href: "/stories" },
+    { label: "Essays", href: "/essays" },
+    { label: "Audio Stories", href: "/audio-stories" },
     { label: "Collections", href: "/collections" },
     { label: "About Linda", href: "/about" },
     { label: "People", href: "/people" },

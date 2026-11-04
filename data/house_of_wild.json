@@ -1,6 +1,25 @@
 {
   "content": [
     {
+      "id": "7afddac2-57d5-460f-997b-e26a77eba947",
+      "slug": "a-quiet-tree",
+      "title": "A Quiet Tree",
+      "subtitle": "",
+      "content_type": "poem",
+      "raw_content": "First stanza line 1\nFirst stanza line 2",
+      "structured_body": [],
+      "excerpt": "First stanza line 1\nFirst stanza line 2",
+      "author_credit": "L.E. Daniels | DEFFA",
+      "alignment": "left",
+      "reading_time_minutes": 1,
+      "tags": [],
+      "status": "draft",
+      "is_homepage_featured": false,
+      "version": 3,
+      "updated_at": "2026-11-04T21:24:41.709Z",
+      "created_at": "2026-11-04T21:24:41.704Z"
+    },
+    {
       "id": "2ae7027d-a948-41b3-bdd3-d2d752757064",
       "slug": "a-quiet-tree",
       "title": "A Quiet Tree",
@@ -160,6 +179,62 @@
       "version": 1,
       "updated_at": "2026-11-04T19:57:26.496Z",
       "created_at": "2026-11-04T19:57:26.496Z"
+    },
+    {
+      "id": "audio-first-garden",
+      "slug": "the-first-garden",
+      "title": "The First Garden",
+      "subtitle": "An audio story on remembrance and quiet faith",
+      "content_type": "audio_story",
+      "raw_content": "In the first garden, nothing asked to be explained. Every green shoot, every damp petal in the morning sun, simply existed under the light.\n\nWe forget that waiting is also an act of faith. When the seasons turn sharp, we look for words that can steady us. This reading was recorded in the quiet hours of dusk, reflecting on where roots take hold when the ground feels unfamiliar.",
+      "excerpt": "An audio reflection on remembrance, faith, and quiet roots. Recorded in the quiet hours of dusk.",
+      "author_credit": "Linda Emefa Daniels",
+      "narrator_credit": "Linda Emefa Daniels",
+      "audio_duration": "8:45 min",
+      "youtube_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "cover_image_url": "/images/linda-emefa-daniels.jpg",
+      "alignment": "left",
+      "reading_time_minutes": 4,
+      "tags": [
+        "Audio Story",
+        "Faith",
+        "Remembrance",
+        "Spoken Word"
+      ],
+      "status": "published",
+      "published_at": "2026-11-04T21:13:11.128Z",
+      "is_homepage_featured": true,
+      "seo_title": "The First Garden — Audio Story by Linda Emefa Daniels",
+      "seo_description": "An audio story on remembrance and quiet faith narrated by Linda Emefa Daniels.",
+      "version": 1,
+      "updated_at": "2026-11-04T21:13:11.128Z",
+      "created_at": "2026-11-04T21:13:11.128Z"
+    },
+    {
+      "id": "essay-stories-refuse-to-stay-quiet",
+      "slug": "on-stories-that-refuse-to-stay-quiet",
+      "title": "On Stories That Refuse to Stay Quiet",
+      "subtitle": "An introductory essay on voice, faith, and shared humanity",
+      "content_type": "essay",
+      "raw_content": "There is a particular kind of silence that precedes an honest sentence. It is not the silence of having nothing to say, but rather the quiet courage of deciding to say what has waited in the dark for too long.\n\nI have learned that when we write from our deepest observations—from our faith, our quiet ache, our sudden joys—we rarely write alone. Between my private memory and your living heart, emotions meet. The circumstance of the story belongs to one person, but the feeling belongs to everyone who has ever walked through the door of another morning.\n\nThat is why this house exists. House of Wild Ink is built for the sentences that refuse to stay quiet in drawers, for the poems that demand to be recited against the noise of the day, and for the reflections that remind us that though we are all different stones, we are shaped by the same quiet earth.",
+      "excerpt": "There is a particular kind of silence that precedes an honest sentence. It is not the silence of having nothing to say, but rather the quiet courage...",
+      "author_credit": "L.E. Daniels | DEFFA",
+      "alignment": "left",
+      "reading_time_minutes": 3,
+      "tags": [
+        "Essay",
+        "Writing",
+        "Faith",
+        "Voice"
+      ],
+      "status": "published",
+      "published_at": "2026-11-04T21:13:11.128Z",
+      "is_homepage_featured": true,
+      "seo_title": "On Stories That Refuse to Stay Quiet — Essay by L.E. Daniels | DEFFA",
+      "seo_description": "An essay on voice, faith, and shared humanity by L.E. Daniels | DEFFA.",
+      "version": 1,
+      "updated_at": "2026-11-04T21:13:11.128Z",
+      "created_at": "2026-11-04T21:13:11.128Z"
     }
   ],
   "collections": [
@@ -203,11 +278,90 @@
       "sort_order": 1,
       "status": "published",
       "created_at": "2026-11-04T19:57:26.496Z",
-      "updated_at": "2026-11-04T19:57:26.496Z"
+      "updated_at": "2026-11-04T19:57:26.496Z",
+      "portrait_media_id": "media-linda-portrait"
     }
   ],
-  "media": [],
+  "media": [
+    {
+      "id": "media-linda-portrait",
+      "filename": "linda-emefa-daniels.jpg",
+      "storage_url": "/images/linda-emefa-daniels.jpg",
+      "mime_type": "image/jpeg",
+      "file_size_bytes": 842100,
+      "alt_text": "Linda Emefa Daniels, author and creator of House of Wild Ink",
+      "caption": "Author Linda Emefa Daniels (L.E. Daniels | DEFFA)",
+      "credit": "House of Wild Ink",
+      "source": "Author Upload",
+      "focal_point": {
+        "x": 0.5,
+        "y": 0.35
+      },
+      "layout_suitability": [
+        "portrait",
+        "cover",
+        "inline"
+      ],
+      "created_at": "2026-11-04T21:13:11.127Z"
+    }
+  ],
   "revisions": [
+    {
+      "id": "1bdee101-3dda-45e8-be64-f1559a2852bc",
+      "item_id": "7afddac2-57d5-460f-997b-e26a77eba947",
+      "item_type": "poem",
+      "version": 2,
+      "change_summary": "Pre-restore snapshot before restoring v1",
+      "snapshot": {
+        "id": "7afddac2-57d5-460f-997b-e26a77eba947",
+        "slug": "a-quiet-tree",
+        "title": "A Quiet Tree (Revised)",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "Revised stanza line 1\nRevised stanza line 2",
+        "structured_body": [],
+        "excerpt": "First stanza line 1\nFirst stanza line 2",
+        "author_credit": "L.E. Daniels | DEFFA",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "status": "published",
+        "is_homepage_featured": false,
+        "version": 2,
+        "updated_at": "2026-11-04T21:24:41.707Z",
+        "created_at": "2026-11-04T21:24:41.704Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-04T21:24:41.709Z"
+    },
+    {
+      "id": "df5c3aa6-dac1-420e-951b-621624b5b535",
+      "item_id": "7afddac2-57d5-460f-997b-e26a77eba947",
+      "item_type": "poem",
+      "version": 1,
+      "change_summary": "Updated: A Quiet Tree (Revised)",
+      "snapshot": {
+        "id": "7afddac2-57d5-460f-997b-e26a77eba947",
+        "slug": "a-quiet-tree",
+        "title": "A Quiet Tree",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "First stanza line 1\nFirst stanza line 2",
+        "structured_body": [],
+        "excerpt": "First stanza line 1\nFirst stanza line 2",
+        "author_credit": "L.E. Daniels | DEFFA",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "status": "draft",
+        "is_homepage_featured": false,
+        "version": 1,
+        "updated_at": "2026-11-04T21:24:41.704Z",
+        "created_at": "2026-11-04T21:24:41.704Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-04T21:24:41.707Z"
+    },
     {
       "id": "b2c2cf90-749b-4e01-8d07-7a324d6cb177",
       "item_id": "2ae7027d-a948-41b3-bdd3-d2d752757064",
@@ -383,17 +537,71 @@
       "metric_date": "2026-11-04",
       "path": "/poems/stones",
       "content_type": "poem",
-      "page_views": 47,
-      "engaged_reads": 39,
-      "share_events": 11
+      "page_views": 49,
+      "engaged_reads": 41,
+      "share_events": 12
     },
     {
       "id": "640d8aa5-bba9-4edb-89cb-7840b1c8ab1c",
       "metric_date": "2026-11-04",
       "path": "/",
       "content_type": "page",
-      "page_views": 6,
-      "engaged_reads": 2,
+      "page_views": 12,
+      "engaged_reads": 4,
+      "share_events": 0
+    },
+    {
+      "id": "c59af89d-c18a-4450-9795-b44645476256",
+      "metric_date": "2026-11-04",
+      "path": "/about",
+      "content_type": "page",
+      "page_views": 3,
+      "engaged_reads": 1,
+      "share_events": 0
+    },
+    {
+      "id": "e15ec73c-50db-477f-a02a-419036c314dc",
+      "metric_date": "2026-11-04",
+      "path": "/newsletter",
+      "content_type": "page",
+      "page_views": 1,
+      "engaged_reads": 0,
+      "share_events": 0
+    },
+    {
+      "id": "4eb96603-0143-4654-acad-9309a22b3898",
+      "metric_date": "2026-11-04",
+      "path": "/stories",
+      "content_type": "story",
+      "page_views": 1,
+      "engaged_reads": 0,
+      "share_events": 0
+    },
+    {
+      "id": "af0b0d67-f50a-4b03-a623-43715bc9a646",
+      "metric_date": "2026-11-04",
+      "path": "/stories/at-the-threshold",
+      "content_type": "story",
+      "page_views": 2,
+      "engaged_reads": 1,
+      "share_events": 0
+    },
+    {
+      "id": "b7dd7897-3704-4d74-8ab2-16dba04bcc53",
+      "metric_date": "2026-11-04",
+      "path": "/audio-stories",
+      "content_type": "page",
+      "page_views": 1,
+      "engaged_reads": 0,
+      "share_events": 0
+    },
+    {
+      "id": "7ad05dfb-486a-45b2-83c9-2a860fb9a83b",
+      "metric_date": "2026-11-04",
+      "path": "/essays",
+      "content_type": "page",
+      "page_views": 1,
+      "engaged_reads": 0,
       "share_events": 0
     }
   ],
@@ -408,6 +616,15 @@
     }
   ],
   "messages": [
+    {
+      "id": "3eacd990-abba-4246-a766-36f8d0ab76fc",
+      "sender_name": "Eleni Vance",
+      "sender_email": "eleni@press.org",
+      "inquiry_category": "Literary Representation",
+      "message": "Inquiry regarding collection rights.",
+      "is_read": false,
+      "created_at": "2026-11-04T21:24:41.714Z"
+    },
     {
       "id": "ec8b8b17-81a5-4b68-a2bb-ba6dffdebf8f",
       "sender_name": "Eleni Vance",
@@ -473,7 +690,11 @@
     "about_linda_short_bio": "Writer and creator of House of Wild Ink. Author under Linda Emefa Daniels and L.E. Daniels | DEFFA.",
     "owner_access_key_hash": "29b6d7faf2381a48767160f5b4073aa7be54b0dd6b5a010a568d6fe7e651f69ea2b4053426cdedcbdd433f9e7c6bc50ae8cd91d7f25ee8a3f0bf1088988170e1",
     "owner_access_key_salt": "5fc6d97c2ea2eb8e10d19b74cc7a3aa8611929a23657ca031384aaa3ffdaf2d0",
-    "last_key_rotation": "2026-11-04T19:57:26.497Z"
+    "last_key_rotation": "2026-11-04T19:57:26.497Z",
+    "featured_audio_id": "audio-first-garden",
+    "featured_essay_id": "essay-stories-refuse-to-stay-quiet",
+    "about_linda_portrait_id": "media-linda-portrait",
+    "press_photo_url": "/images/linda-emefa-daniels.jpg"
   },
   "activeSessions": [
     {
@@ -505,6 +726,18 @@
       "email": "linda@houseofwildink.com",
       "role": "Owner",
       "expiresAt": 1793910531994
+    },
+    {
+      "token": "8d62748b7b3b3fa1ef33e25bb03ea72ffcf735d5921184e3d518fc3fe2035afe",
+      "email": "linda@houseofwildink.com",
+      "role": "Owner",
+      "expiresAt": 1793911611963
+    },
+    {
+      "token": "95a1935baef759d27d8d799a55c169a8d474225faf41082e4e72a5cf9e246ab4",
+      "email": "linda@houseofwildink.com",
+      "role": "Owner",
+      "expiresAt": 1793914031461
     }
   ]
 }

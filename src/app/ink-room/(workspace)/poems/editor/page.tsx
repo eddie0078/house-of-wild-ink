@@ -18,6 +18,7 @@ import {
   Loader2,
   Trash2,
 } from "lucide-react";
+import { ImageUploadField } from "@/components/ImageUploadField";
 import Link from "next/link";
 
 function PoemEditorContent() {
@@ -37,6 +38,7 @@ function PoemEditorContent() {
   const [status, setStatus] = useState<"draft" | "published" | "scheduled">("draft");
   const [isFeatured, setIsFeatured] = useState(false);
   const [seoDescription, setSeoDescription] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState("");
 
   // Autosave and Preview states
   const [saveState, setSaveState] = useState<"Saved" | "Saving..." | "Unsaved changes" | "Save failed">("Saved");
@@ -69,6 +71,7 @@ function PoemEditorContent() {
             setStatus(p.status === "archived" ? "draft" : p.status);
             setIsFeatured(p.is_homepage_featured);
             setSeoDescription(p.seo_description || "");
+            setCoverImageUrl(p.cover_image_url || "");
             setSaveState("Saved");
           }
         });
@@ -128,6 +131,7 @@ function PoemEditorContent() {
         tags: tagsInput.split(",").map((t) => t.trim()).filter(Boolean),
         collection_id: collectionId || undefined,
         author_note: authorNote || undefined,
+        cover_image_url: coverImageUrl || undefined,
         status: publishStatus,
         is_homepage_featured: isFeatured,
         seo_description: seoDescription || rawContent.slice(0, 150),
@@ -365,6 +369,16 @@ function PoemEditorContent() {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Representative Cover Artwork */}
+          <div className="bg-brand-parchment p-6 rounded-2xl border border-brand-gold/30">
+            <ImageUploadField
+              value={coverImageUrl}
+              onChange={setCoverImageUrl}
+              label="Representative Artwork"
+              helperText="Upload or choose artwork to accompany this poem"
+            />
           </div>
 
           {/* Author Attribution Credit */}

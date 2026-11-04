@@ -17,6 +17,7 @@ import {
   Loader2,
   Theater,
 } from "lucide-react";
+import { ImageUploadField } from "@/components/ImageUploadField";
 import Link from "next/link";
 
 function StoryEditorContent() {
@@ -41,6 +42,7 @@ function StoryEditorContent() {
   const [status, setStatus] = useState<"draft" | "published" | "scheduled">("draft");
   const [isFeatured, setIsFeatured] = useState(false);
   const [seoDescription, setSeoDescription] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState("");
 
   const [saveState, setSaveState] = useState<"Saved" | "Saving..." | "Unsaved changes" | "Save failed">("Saved");
   const [showPreview, setShowPreview] = useState(false);
@@ -73,6 +75,7 @@ function StoryEditorContent() {
             setStatus(s.status === "archived" ? "draft" : s.status);
             setIsFeatured(s.is_homepage_featured);
             setSeoDescription(s.seo_description || "");
+            setCoverImageUrl(s.cover_image_url || "");
             setSaveState("Saved");
           }
         });
@@ -127,6 +130,7 @@ function StoryEditorContent() {
         reading_time_minutes: readingTime,
         tags: tagsInput.split(",").map((t) => t.trim()).filter(Boolean),
         collection_id: collectionId || undefined,
+        cover_image_url: coverImageUrl || undefined,
         status: publishStatus,
         is_homepage_featured: isFeatured,
         seo_description: seoDescription || excerpt,
@@ -365,6 +369,15 @@ function StoryEditorContent() {
 
         {/* Right Settings Drawer */}
         <div className="space-y-6">
+          <div className="bg-brand-parchment p-6 rounded-2xl border border-brand-gold/30">
+            <ImageUploadField
+              value={coverImageUrl}
+              onChange={setCoverImageUrl}
+              label="Representative Artwork"
+              helperText="Upload or select artwork for this story or drama"
+            />
+          </div>
+
           <div className="bg-brand-parchment p-6 rounded-2xl border border-brand-gold/30 space-y-4">
             <label className="block text-xs font-sans font-semibold uppercase tracking-wider text-brand-forest">
               Collection Assignment

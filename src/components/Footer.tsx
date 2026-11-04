@@ -46,6 +46,16 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/essays" className="hover:text-brand-coral transition-colors">
+                  Essays & Articles
+                </Link>
+              </li>
+              <li>
+                <Link href="/audio-stories" className="hover:text-brand-coral transition-colors">
+                  Audio Stories
+                </Link>
+              </li>
+              <li>
                 <Link href="/collections" className="hover:text-brand-coral transition-colors">
                   Collections
                 </Link>

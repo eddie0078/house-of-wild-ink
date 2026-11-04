@@ -40,14 +40,17 @@ export function Navigation() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-brand-parchment/95 backdrop-blur-md border-b border-brand-gold/20 transition-colors">
+    <header className="sticky top-0 z-40 bg-[#F7F4EE]/95 backdrop-blur-md border-b border-[rgba(197,160,89,0.3)] transition-colors shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo & Wordmark */}
+        {/* Brand Logo & Wordmark with Floral Blossom */}
         <Link
           href="/"
           className="flex items-center gap-3.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral rounded-lg p-1"
         >
-          <BrandMark size={36} variant="dark" className="group-hover:scale-105 transition-transform" />
+          <div className="relative">
+            <BrandMark size={36} variant="dark" className="group-hover:scale-105 transition-transform" />
+            <span className="absolute -top-1 -right-1.5 text-[11px] text-[#C85A46] animate-pulse">🌸</span>
+          </div>
           <Wordmark size="md" showSignature={true} />
         </Link>
 

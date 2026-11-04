@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { PublicShell } from "@/components/PublicShell";
 import { FloralDivider } from "@/components/FloralDivider";
 import { SoundwaveIcon } from "@/components/SoundwaveIcon";
+import { BougainvilleaBractCluster, BougainvilleaDivider } from "@/components/Bougainvillea";
 import { Headphones, ExternalLink, Play, Clock, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -24,12 +25,12 @@ export default function AudioStoriesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 floral-watermark">
         {/* Header Hero */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(197,160,89,0.4)] bg-[#FAF8F5] text-xs font-serif text-[#C85A46]">
-            <span>🌸</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(197,160,89,0.4)] bg-[#FAF8F5] text-xs font-serif text-[#D91E75]">
+            <BougainvilleaBractCluster color="magenta" size={20} />
             <span className="tracking-widest uppercase text-[11px] font-semibold text-[#182C25]">
               Spoken Word & Narratives
             </span>
-            <span>✿</span>
+            <BougainvilleaBractCluster color="coral" size={18} />
           </div>
           <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#182C25]">
             Audio Stories
@@ -42,7 +43,7 @@ export default function AudioStoriesPage() {
           </p>
         </div>
 
-        <FloralDivider variant="rose" className="my-10" />
+        <BougainvilleaDivider className="my-10" />
 
         {/* Audio Stories Grid */}
         {audioStories.length === 0 ? (

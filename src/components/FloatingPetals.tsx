@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 
-interface Petal {
+interface BougainvilleaBract {
   x: number;
   y: number;
   size: number;
@@ -14,17 +14,22 @@ interface Petal {
   color: string;
   wobble: number;
   wobbleSpeed: number;
+  bractVariant: 0 | 1 | 2; // Papery variations
 }
 
-const PETAL_COLORS = [
-  "rgba(244, 166, 175, 0.65)", // Soft rose petal
-  "rgba(235, 130, 142, 0.60)", // Coral blossom
-  "rgba(250, 212, 192, 0.55)", // Peach flower
-  "rgba(215, 110, 125, 0.50)", // Deep wild rose
-  "rgba(223, 193, 130, 0.45)", // Antique gold petal
+// Full Bougainvillea Color Palette: Crimson, Fuchsia Magenta, Sunset Coral, Royal Purple, Golden Apricot
+const BOUGAINVILLEA_PETAL_COLORS = [
+  "rgba(216, 30, 40, 0.80)",  // Scarlet Crimson (User's Bougainvillea)
+  "rgba(228, 45, 55, 0.75)",  // Bright Red Bract
+  "rgba(217, 30, 117, 0.75)", // Fuchsia Magenta
+  "rgba(181, 23, 158, 0.70)", // Deep Violet-Magenta
+  "rgba(255, 111, 89, 0.75)", // Sunset Coral
+  "rgba(131, 56, 236, 0.65)", // Royal Purple
+  "rgba(224, 159, 62, 0.70)", // Golden Apricot
+  "rgba(244, 166, 175, 0.70)",// Soft Rose Bract
 ];
 
-export function FloatingPetals({ count = 24, className = "" }: { count?: number; className?: string }) {
+export function FloatingPetals({ count = 30, className = "" }: { count?: number; className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -49,40 +54,56 @@ export function FloatingPetals({ count = 24, className = "" }: { count?: number;
 
     window.addEventListener("resize", handleResize);
 
-    const petals: Petal[] = Array.from({ length: count }, () => ({
+    const petals: BougainvilleaBract[] = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 8 + 6,
-      speedX: Math.random() * 0.8 - 0.2,
-      speedY: Math.random() * 0.9 + 0.5,
+      size: Math.random() * 10 + 7,
+      speedX: Math.random() * 0.9 - 0.25,
+      speedY: Math.random() * 1.0 + 0.55,
       rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * 0.03,
-      opacity: Math.random() * 0.4 + 0.4,
-      color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+      rotationSpeed: (Math.random() - 0.5) * 0.035,
+      opacity: Math.random() * 0.35 + 0.45,
+      color: BOUGAINVILLEA_PETAL_COLORS[Math.floor(Math.random() * BOUGAINVILLEA_PETAL_COLORS.length)],
       wobble: Math.random() * Math.PI * 2,
-      wobbleSpeed: Math.random() * 0.03 + 0.01,
+      wobbleSpeed: Math.random() * 0.03 + 0.012,
+      bractVariant: (Math.floor(Math.random() * 3) as 0 | 1 | 2),
     }));
 
-    const drawPetal = (p: Petal) => {
+    const drawBougainvilleaBract = (p: BougainvilleaBract) => {
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rotation);
       ctx.fillStyle = p.color;
 
-      // Draw soft organic petal shape
+      // Draw characteristic heart-shaped, paper-thin Bougainvillea bract
       ctx.beginPath();
-      ctx.moveTo(0, -p.size);
-      ctx.bezierCurveTo(p.size * 0.8, -p.size * 0.8, p.size * 0.9, p.size * 0.3, 0, p.size);
-      ctx.bezierCurveTo(-p.size * 0.9, p.size * 0.3, -p.size * 0.8, -p.size * 0.8, 0, -p.size);
+      ctx.moveTo(0, -p.size * 1.1);
+      ctx.bezierCurveTo(p.size * 0.9, -p.size * 0.7, p.size * 1.05, p.size * 0.4, 0, p.size * 0.95);
+      ctx.bezierCurveTo(-p.size * 1.05, p.size * 0.4, -p.size * 0.9, -p.size * 0.7, 0, -p.size * 1.1);
       ctx.fill();
 
-      // Subtle center vein
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
-      ctx.lineWidth = 0.6;
+      // Delicate translucent paper-skin veins
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+      ctx.lineWidth = 0.7;
       ctx.beginPath();
-      ctx.moveTo(0, -p.size * 0.8);
-      ctx.lineTo(0, p.size * 0.6);
+      ctx.moveTo(0, -p.size * 0.9);
+      ctx.lineTo(0, p.size * 0.7);
+
+      // Branching side veins
+      ctx.moveTo(-p.size * 0.4, -p.size * 0.3);
+      ctx.lineTo(0, -p.size * 0.15);
+      ctx.lineTo(p.size * 0.4, -p.size * 0.3);
+
+      ctx.moveTo(-p.size * 0.35, p.size * 0.2);
+      ctx.lineTo(0, p.size * 0.3);
+      ctx.lineTo(p.size * 0.35, p.size * 0.2);
       ctx.stroke();
+
+      // Tiny creamy floret star at the base
+      ctx.fillStyle = "#FFFDF5";
+      ctx.beginPath();
+      ctx.arc(0, p.size * 0.65, 1.2, 0, Math.PI * 2);
+      ctx.fill();
 
       ctx.restore();
     };
@@ -92,19 +113,19 @@ export function FloatingPetals({ count = 24, className = "" }: { count?: number;
 
       petals.forEach((p) => {
         p.wobble += p.wobbleSpeed;
-        p.x += p.speedX + Math.sin(p.wobble) * 0.6;
+        p.x += p.speedX + Math.sin(p.wobble) * 0.75;
         p.y += p.speedY;
         p.rotation += p.rotationSpeed;
 
         // Wrap around boundaries
-        if (p.y > height + 20) {
-          p.y = -20;
+        if (p.y > height + 25) {
+          p.y = -25;
           p.x = Math.random() * width;
         }
-        if (p.x > width + 20) p.x = -20;
-        if (p.x < -20) p.x = width + 20;
+        if (p.x > width + 25) p.x = -25;
+        if (p.x < -25) p.x = width + 25;
 
-        drawPetal(p);
+        drawBougainvilleaBract(p);
       });
 
       animationFrameId = requestAnimationFrame(render);

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PublicShell } from "@/components/PublicShell";
 import { BotanicalFrame } from "@/components/BotanicalFrame";
 import { FloralDivider } from "@/components/FloralDivider";
+import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaPhotoSprig } from "@/components/Bougainvillea";
 import { db } from "@/lib/db";
 import { Feather, Download, ArrowRight, Sparkles, BookOpen, Headphones } from "lucide-react";
 import { Metadata } from "next";
@@ -54,12 +55,12 @@ export default function AboutPage() {
 
           {/* Right Column: Title, Credentials & Verified Statement */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(197,160,89,0.4)] bg-[#FAF8F5] text-xs font-serif text-[#C85A46]">
-              <span>🌸</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(197,160,89,0.4)] bg-[#FAF8F5] text-xs font-serif text-[#D81E28]">
+              <BougainvilleaBractCluster color="crimson" size={20} />
               <span className="tracking-widest uppercase text-[11px] font-semibold text-[#182C25]">
                 Author & Creator
               </span>
-              <span>✿</span>
+              <BougainvilleaBractCluster color="magenta" size={20} />
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl text-[#182C25] font-bold tracking-tight leading-tight">
@@ -95,7 +96,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <FloralDivider variant="rose" className="my-12" />
+        <BougainvilleaDivider className="my-12" />
 
         {/* Selected Works Connected Dynamically */}
         {works.length > 0 && (

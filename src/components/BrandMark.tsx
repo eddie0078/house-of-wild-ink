@@ -99,31 +99,31 @@ export function Wordmark({
   const isLight = theme === "light";
 
   const titleSizes = {
-    sm: "text-lg",
-    md: "text-2xl",
-    lg: "text-3xl sm:text-4xl",
+    sm: "text-base sm:text-lg",
+    md: "text-lg xl:text-xl",
+    lg: "text-2xl sm:text-3xl",
     xl: "text-4xl sm:text-6xl",
   };
 
   const sigSizes = {
-    sm: "text-[10px]",
-    md: "text-xs",
-    lg: "text-sm",
+    sm: "text-[9px]",
+    md: "text-[10px] xl:text-[11px]",
+    lg: "text-xs",
     xl: "text-base sm:text-lg",
   };
 
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={`flex flex-col whitespace-nowrap shrink-0 ${className}`}>
       <span
-        className={`font-display font-bold tracking-tight transition-colors ${
+        className={`font-display font-bold tracking-tight transition-colors leading-tight ${
           titleSizes[size]
         } ${isLight ? "text-brand-cream" : "text-brand-forest"}`}
       >
-        House of Wild Ink
+        House <span className="font-reading italic font-normal text-brand-gold">of</span> Wild Ink
       </span>
       {showSignature && (
         <span
-          className={`font-sans tracking-widest uppercase transition-colors mt-0.5 ${
+          className={`font-sans tracking-[0.16em] uppercase transition-colors leading-none mt-0.5 ${
             sigSizes[size]
           } ${isLight ? "text-brand-gold-light" : "text-brand-coral"}`}
         >

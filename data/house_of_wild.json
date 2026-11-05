@@ -1,6 +1,25 @@
 {
   "content": [
     {
+      "id": "d2d1ff56-c2aa-4637-8a70-90bceb3fba5a",
+      "slug": "a-quiet-tree",
+      "title": "A Quiet Tree",
+      "subtitle": "",
+      "content_type": "poem",
+      "raw_content": "First stanza line 1\nFirst stanza line 2",
+      "structured_body": [],
+      "excerpt": "First stanza line 1\nFirst stanza line 2",
+      "author_credit": "L.E. Daniels | DEFFA",
+      "alignment": "left",
+      "reading_time_minutes": 1,
+      "tags": [],
+      "status": "draft",
+      "is_homepage_featured": false,
+      "version": 3,
+      "updated_at": "2026-11-05T14:00:20.366Z",
+      "created_at": "2026-11-05T14:00:20.349Z"
+    },
+    {
       "id": "6c39bcf8-413b-4984-af57-e900edd7510c",
       "slug": "a-quiet-tree",
       "title": "A Quiet Tree",
@@ -325,6 +344,62 @@
     }
   ],
   "revisions": [
+    {
+      "id": "1f4b4907-aeff-4258-bbc3-8a2b39172894",
+      "item_id": "d2d1ff56-c2aa-4637-8a70-90bceb3fba5a",
+      "item_type": "poem",
+      "version": 2,
+      "change_summary": "Pre-restore snapshot before restoring v1",
+      "snapshot": {
+        "id": "d2d1ff56-c2aa-4637-8a70-90bceb3fba5a",
+        "slug": "a-quiet-tree",
+        "title": "A Quiet Tree (Revised)",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "Revised stanza line 1\nRevised stanza line 2",
+        "structured_body": [],
+        "excerpt": "First stanza line 1\nFirst stanza line 2",
+        "author_credit": "L.E. Daniels | DEFFA",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "status": "published",
+        "is_homepage_featured": false,
+        "version": 2,
+        "updated_at": "2026-11-05T14:00:20.361Z",
+        "created_at": "2026-11-05T14:00:20.349Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-05T14:00:20.366Z"
+    },
+    {
+      "id": "c6802355-ef86-491a-8ca1-42408dadd655",
+      "item_id": "d2d1ff56-c2aa-4637-8a70-90bceb3fba5a",
+      "item_type": "poem",
+      "version": 1,
+      "change_summary": "Updated: A Quiet Tree (Revised)",
+      "snapshot": {
+        "id": "d2d1ff56-c2aa-4637-8a70-90bceb3fba5a",
+        "slug": "a-quiet-tree",
+        "title": "A Quiet Tree",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "First stanza line 1\nFirst stanza line 2",
+        "structured_body": [],
+        "excerpt": "First stanza line 1\nFirst stanza line 2",
+        "author_credit": "L.E. Daniels | DEFFA",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "status": "draft",
+        "is_homepage_featured": false,
+        "version": 1,
+        "updated_at": "2026-11-05T14:00:20.349Z",
+        "created_at": "2026-11-05T14:00:20.349Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-05T14:00:20.361Z"
+    },
     {
       "id": "2e866bb1-623d-4b19-a2c6-5773f5993a8d",
       "item_id": "6c39bcf8-413b-4984-af57-e900edd7510c",
@@ -702,8 +777,8 @@
       "metric_date": "2026-11-05",
       "path": "/",
       "content_type": "page",
-      "page_views": 4,
-      "engaged_reads": 2,
+      "page_views": 16,
+      "engaged_reads": 7,
       "share_events": 0
     },
     {
@@ -711,9 +786,9 @@
       "metric_date": "2026-11-05",
       "path": "/poems/stones",
       "content_type": "poem",
-      "page_views": 3,
-      "engaged_reads": 2,
-      "share_events": 1
+      "page_views": 4,
+      "engaged_reads": 3,
+      "share_events": 2
     },
     {
       "id": "6087b91b-3af4-4def-8cd8-0bc11a93b7a8",
@@ -732,6 +807,15 @@
       "page_views": 2,
       "engaged_reads": 1,
       "share_events": 0
+    },
+    {
+      "id": "d69eeef5-03fc-4bf9-8299-366683f0343a",
+      "metric_date": "2026-11-05",
+      "path": "/contact",
+      "content_type": "page",
+      "page_views": 1,
+      "engaged_reads": 0,
+      "share_events": 0
     }
   ],
   "subscribers": [
@@ -745,6 +829,15 @@
     }
   ],
   "messages": [
+    {
+      "id": "9165be03-337a-4a22-a65f-6dc3dc437d37",
+      "sender_name": "Eleni Vance",
+      "sender_email": "eleni@press.org",
+      "inquiry_category": "Literary Representation",
+      "message": "Inquiry regarding collection rights.",
+      "is_read": false,
+      "created_at": "2026-11-05T14:00:20.378Z"
+    },
     {
       "id": "446bb5ef-0ab0-49e9-9997-d9e9fc54be28",
       "sender_name": "Eleni Vance",
@@ -882,6 +975,12 @@
       "email": "linda@houseofwildink.com",
       "role": "Owner",
       "expiresAt": 1793916955169
+    },
+    {
+      "token": "68e4e0f1885ffc2638f8430f444ff78f0981234cccfbefd0e1743ab8318abe7b",
+      "email": "linda@houseofwildink.com",
+      "role": "Owner",
+      "expiresAt": 1793957879262
     }
   ]
 }

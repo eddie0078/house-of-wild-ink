@@ -38,9 +38,9 @@ export function Navigation() {
     { label: "Poems", href: "/poems" },
     { label: "Stories", href: "/stories" },
     { label: "Essays", href: "/essays" },
-    { label: "Audio Stories", href: "/audio-stories" },
+    { label: "Audio", fullLabel: "Audio Stories", href: "/audio-stories" },
     { label: "Collections", href: "/collections" },
-    { label: "About Linda", href: "/about" },
+    { label: "About", fullLabel: "About Linda", href: "/about" },
     { label: "People", href: "/people" },
     { label: "Newsletter", href: "/newsletter" },
     { label: "Contact", href: "/contact" },
@@ -48,34 +48,41 @@ export function Navigation() {
 
   return (
     <header className="sticky top-0 z-40 bg-[#F7F4EE]/95 backdrop-blur-md border-b border-[rgba(197,160,89,0.3)] transition-colors shadow-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo & Wordmark with Floral Blossom */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+        {/* Brand Logo & Wordmark with Floral Blossom (Sacred shrink-0) */}
         <Link
           href="/"
-          className="flex items-center gap-3.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral rounded-lg p-1"
+          className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral rounded-lg p-1 shrink-0"
         >
-          <div className="relative">
-            <BrandMark size={36} variant="dark" className="group-hover:scale-105 transition-transform" />
-            <span className="absolute -top-1 -right-1.5 text-[11px] text-[#C85A46] animate-pulse">🌸</span>
+          <div className="relative shrink-0">
+            <BrandMark size={32} variant="dark" className="group-hover:scale-105 transition-transform" />
+            <span className="absolute -top-1 -right-1 text-[10px] text-[#C85A46] animate-pulse">🌸</span>
           </div>
           <Wordmark size="md" showSignature={true} />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
+        {/* Desktop Navigation (Available on xl screens and wider with zero wrapping) */}
+        <nav className="hidden xl:flex items-center gap-1 2xl:gap-1.5 shrink-0" aria-label="Main Navigation">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-1.5 text-sm font-sans font-medium rounded-md transition-all ${
+                className={`px-2 2xl:px-2.5 py-1.5 text-xs 2xl:text-sm font-sans font-medium rounded-md whitespace-nowrap transition-all ${
                   isActive
-                    ? "text-brand-coral font-semibold bg-brand-cream/80"
+                    ? "text-brand-coral font-semibold bg-brand-cream/90"
                     : "text-brand-forest/90 hover:text-brand-forest hover:bg-brand-cream/50"
                 }`}
               >
-                {link.label}
+                {link.fullLabel ? (
+                  <>
+                    <span>{link.label}</span>
+                    <span className="hidden 2xl:inline">{link.fullLabel.replace(link.label, "")}</span>
+                  </>
+                ) : (
+                  link.label
+                )}
               </Link>
             );
           })}
@@ -84,54 +91,54 @@ export function Navigation() {
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[rgba(197,160,89,0.35)] bg-white/70 hover:bg-white text-xs font-sans text-[#182C25] hover:border-[#C5A059] transition cursor-pointer shadow-2xs"
+            className="ml-1 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-[rgba(197,160,89,0.35)] bg-white/70 hover:bg-white text-xs font-sans text-[#182C25] hover:border-[#C5A059] transition cursor-pointer shadow-2xs shrink-0"
             title="Search poems, stories, and essays (⌘K)"
           >
             <Search className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span className="hidden xl:inline text-[11px] text-[#64746E]">Search</span>
-            <kbd className="hidden sm:inline px-1 py-0.2 rounded bg-stone-100 text-[10px] font-mono text-[#64746E] border border-stone-200">⌘K</kbd>
+            <span className="text-[11px] text-[#64746E]">Search</span>
+            <kbd className="hidden 2xl:inline px-1 py-0.2 rounded bg-stone-100 text-[10px] font-mono text-[#64746E] border border-stone-200">⌘K</kbd>
           </button>
 
           {/* Bougainvillea Mood Color Switcher */}
-          <BougainvilleaMoodSwitcher className="ml-1" />
+          <BougainvilleaMoodSwitcher className="ml-0.5 shrink-0" />
 
           {/* Section 3: The Ink Room Door/Key Button */}
           <Link
             href="/ink-room/gate"
-            className="ml-2 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-gold/60 text-brand-forest text-xs font-sans font-semibold tracking-wider uppercase hover:bg-brand-forest hover:text-brand-cream hover:border-brand-forest transition-all shadow-xs"
+            className="ml-1.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-gold/60 text-brand-forest text-xs font-sans font-semibold tracking-wider uppercase hover:bg-brand-forest hover:text-brand-cream hover:border-brand-forest transition-all shadow-xs shrink-0 whitespace-nowrap"
             title="Private Author Entrance"
           >
-            <KeyRound className="w-3.5 h-3.5 text-brand-coral" />
+            <KeyRound className="w-3.5 h-3.5 text-brand-coral shrink-0" />
             <span>The Ink Room</span>
           </Link>
         </nav>
 
-        {/* Mobile Actions */}
-        <div className="flex items-center lg:hidden gap-1.5">
+        {/* Mobile & Tablet Actions (Screens under xl) */}
+        <div className="flex items-center xl:hidden gap-1.5 sm:gap-2 shrink-0">
           <BougainvilleaMoodSwitcher />
 
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="p-1.5 rounded-full border border-[rgba(197,160,89,0.35)] bg-white text-[#182C25]"
+            className="p-2 rounded-full border border-[rgba(197,160,89,0.35)] bg-white text-[#182C25] hover:bg-brand-cream transition cursor-pointer"
             title="Search (⌘K)"
           >
-            <Search className="w-3.5 h-3.5 text-[#C5A059]" />
+            <Search className="w-4 h-4 text-[#C5A059]" />
           </button>
 
           <Link
             href="/ink-room/gate"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-brand-gold/50 text-brand-forest text-xs font-sans font-medium hover:bg-brand-forest hover:text-brand-cream transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-gold/50 text-brand-forest text-xs font-sans font-medium hover:bg-brand-forest hover:text-brand-cream transition-all"
             aria-label="The Ink Room Door"
           >
-            <KeyRound className="w-3 h-3 text-brand-coral" />
-            <span>Ink Room</span>
+            <KeyRound className="w-3.5 h-3.5 text-brand-coral" />
+            <span className="hidden sm:inline">Ink Room</span>
           </Link>
 
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-md text-brand-forest hover:bg-brand-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral"
+            className="p-2 rounded-md text-brand-forest hover:bg-brand-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral cursor-pointer"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
           >
@@ -140,9 +147,9 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Accessible Mobile Navigation Drawer */}
+      {/* Accessible Mobile/Tablet Navigation Drawer */}
       {isOpen && (
-        <div className="lg:hidden border-b border-brand-gold/20 bg-brand-parchment px-4 pt-2 pb-6 space-y-1 shadow-lg animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="xl:hidden border-b border-brand-gold/20 bg-brand-parchment px-4 pt-2 pb-6 space-y-1 shadow-lg animate-in fade-in slide-in-from-top-4 duration-200">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (

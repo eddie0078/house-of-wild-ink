@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PublicShell } from "@/components/PublicShell";
 import { db } from "@/lib/db";
 import { BookOpen, Clock, ArrowRight, Theater } from "lucide-react";
+import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaCascadingVine } from "@/components/Bougainvillea";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,11 +19,14 @@ export default function StoriesIndexPage() {
 
   return (
     <PublicShell>
-      <div className="max-w-7xl mx-auto px-6 py-16 sm:py-24">
+      <div className="relative max-w-7xl mx-auto px-6 py-16 sm:py-24">
+        {/* Decorative corner Bougainvillea vine */}
+        <BougainvilleaCascadingVine primaryColor="coral" className="hidden lg:block -top-4 -right-4" />
+
         {/* Editorial Header */}
-        <div className="max-w-3xl mb-16">
+        <div className="max-w-3xl mb-12">
           <div className="inline-flex items-center gap-2 text-xs font-sans tracking-widest uppercase text-brand-coral font-semibold mb-3">
-            <BookOpen className="w-3.5 h-3.5" />
+            <BougainvilleaBractCluster color="coral" size={16} />
             <span>Prose & Drama</span>
           </div>
           <h1 className="font-display text-4xl sm:text-6xl text-brand-forest font-bold tracking-tight mb-4">
@@ -32,6 +36,8 @@ export default function StoriesIndexPage() {
             Long-form creative fiction, dialogue-driven chamber dramas, and quiet essays written for the open heart.
           </p>
         </div>
+
+        <BougainvilleaDivider className="my-8" />
 
         {/* Stories Grid */}
         {stories.length > 0 ? (

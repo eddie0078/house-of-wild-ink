@@ -133,6 +133,8 @@ export interface NewsletterSubscriber {
   subscribed_at: string;
 }
 
+export type Subscriber = NewsletterSubscriber;
+
 export interface ContactMessage {
   id: string;
   sender_name: string;

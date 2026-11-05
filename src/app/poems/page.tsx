@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PublicShell } from "@/components/PublicShell";
 import { db } from "@/lib/db";
 import { Feather, Clock, ArrowRight, Tag } from "lucide-react";
+import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaCascadingVine } from "@/components/Bougainvillea";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,11 +19,14 @@ export default function PoemsIndexPage() {
 
   return (
     <PublicShell>
-      <div className="max-w-7xl mx-auto px-6 py-16 sm:py-24">
+      <div className="relative max-w-7xl mx-auto px-6 py-16 sm:py-24">
+        {/* Decorative corner Bougainvillea vine */}
+        <BougainvilleaCascadingVine primaryColor="magenta" className="hidden lg:block -top-4 -right-4" />
+
         {/* Editorial Header */}
-        <div className="max-w-3xl mb-16">
+        <div className="max-w-3xl mb-12">
           <div className="inline-flex items-center gap-2 text-xs font-sans tracking-widest uppercase text-brand-coral font-semibold mb-3">
-            <Feather className="w-3.5 h-3.5" />
+            <BougainvilleaBractCluster color="crimson" size={16} />
             <span>The Poetry Registry</span>
           </div>
           <h1 className="font-display text-4xl sm:text-6xl text-brand-forest font-bold tracking-tight mb-4">
@@ -32,6 +36,8 @@ export default function PoemsIndexPage() {
             Verses that hold their shape. Each line break, stanza pause, and intentional whitespace preserved as written.
           </p>
         </div>
+
+        <BougainvilleaDivider className="my-8" />
 
         {/* Poetry Grid */}
         {poems.length > 0 ? (

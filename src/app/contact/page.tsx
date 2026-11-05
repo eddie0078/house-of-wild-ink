@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { PublicShell } from "@/components/PublicShell";
 import { Mail, CheckCircle2, AlertCircle, Loader2, Send } from "lucide-react";
+import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaCascadingVine } from "@/components/Bougainvillea";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -48,11 +49,14 @@ export default function ContactPage() {
 
   return (
     <PublicShell>
-      <div className="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+      <div className="relative max-w-3xl mx-auto px-6 py-16 sm:py-24">
+        {/* Decorative Bougainvillea sprig */}
+        <BougainvilleaCascadingVine primaryColor="crimson" className="hidden lg:block -top-4 -right-8" />
+
         {/* Header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 text-xs font-sans tracking-widest uppercase text-brand-coral font-semibold mb-3">
-            <Mail className="w-3.5 h-3.5" />
+            <BougainvilleaBractCluster color="crimson" size={16} />
             <span>The Writing Desk</span>
           </div>
           <h1 className="font-display text-4xl sm:text-6xl text-brand-forest font-bold tracking-tight mb-4">
@@ -62,6 +66,8 @@ export default function ContactPage() {
             Direct communication for editorial inquiries, speaking invitations, collaborative proposals, or readers sharing what a story awakened.
           </p>
         </div>
+
+        <BougainvilleaDivider className="my-8" />
 
         {/* Contact Form Card */}
         <div className="bg-brand-cream rounded-2xl p-8 sm:p-12 border border-brand-gold/30 shadow-xs">

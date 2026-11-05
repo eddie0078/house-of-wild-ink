@@ -4,17 +4,24 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BrandMark, Wordmark } from "./BrandMark";
-import { KeyRound, Menu, X } from "lucide-react";
+import { KeyRound, Menu, X, Search } from "lucide-react";
+import { SearchModal } from "./SearchModal";
+import { BougainvilleaMoodSwitcher } from "./BougainvilleaMoodSwitcher";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
 
-  // Close mobile menu on Escape key
+  // Global keydown listeners for Escape and ⌘K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsOpen(false);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -73,10 +80,25 @@ export function Navigation() {
             );
           })}
 
+          {/* Universal Search Trigger Button */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[rgba(197,160,89,0.35)] bg-white/70 hover:bg-white text-xs font-sans text-[#182C25] hover:border-[#C5A059] transition cursor-pointer shadow-2xs"
+            title="Search poems, stories, and essays (⌘K)"
+          >
+            <Search className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span className="hidden xl:inline text-[11px] text-[#64746E]">Search</span>
+            <kbd className="hidden sm:inline px-1 py-0.2 rounded bg-stone-100 text-[10px] font-mono text-[#64746E] border border-stone-200">⌘K</kbd>
+          </button>
+
+          {/* Bougainvillea Mood Color Switcher */}
+          <BougainvilleaMoodSwitcher className="ml-1" />
+
           {/* Section 3: The Ink Room Door/Key Button */}
           <Link
             href="/ink-room/gate"
-            className="ml-3 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-gold/60 text-brand-forest text-xs font-sans font-semibold tracking-wider uppercase hover:bg-brand-forest hover:text-brand-cream hover:border-brand-forest transition-all shadow-xs"
+            className="ml-2 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-gold/60 text-brand-forest text-xs font-sans font-semibold tracking-wider uppercase hover:bg-brand-forest hover:text-brand-cream hover:border-brand-forest transition-all shadow-xs"
             title="Private Author Entrance"
           >
             <KeyRound className="w-3.5 h-3.5 text-brand-coral" />
@@ -84,8 +106,19 @@ export function Navigation() {
           </Link>
         </nav>
 
-        {/* Mobile Hamburger Toggle */}
-        <div className="flex items-center lg:hidden gap-2">
+        {/* Mobile Actions */}
+        <div className="flex items-center lg:hidden gap-1.5">
+          <BougainvilleaMoodSwitcher />
+
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="p-1.5 rounded-full border border-[rgba(197,160,89,0.35)] bg-white text-[#182C25]"
+            title="Search (⌘K)"
+          >
+            <Search className="w-3.5 h-3.5 text-[#C5A059]" />
+          </button>
+
           <Link
             href="/ink-room/gate"
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-brand-gold/50 text-brand-forest text-xs font-sans font-medium hover:bg-brand-forest hover:text-brand-cream transition-all"
@@ -137,6 +170,9 @@ export function Navigation() {
           </div>
         </div>
       )}
+
+      {/* Global Universal Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

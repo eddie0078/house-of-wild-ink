@@ -108,13 +108,30 @@ export function FloatingPetals({ count = 30, className = "" }: { count?: number;
       ctx.restore();
     };
 
+    let mouseBreezeX = 0;
+    let mouseBreezeY = 0;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Gentle breeze deflected by mouse position
+      const normX = (e.clientX / window.innerWidth) - 0.5;
+      mouseBreezeX = normX * 0.6;
+    };
+
+    const handleScroll = () => {
+      mouseBreezeY = 0.5;
+      setTimeout(() => { mouseBreezeY = 0; }, 300);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
       petals.forEach((p) => {
         p.wobble += p.wobbleSpeed;
-        p.x += p.speedX + Math.sin(p.wobble) * 0.75;
-        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.wobble) * 0.75 + mouseBreezeX;
+        p.y += p.speedY + mouseBreezeY;
         p.rotation += p.rotationSpeed;
 
         // Wrap around boundaries
@@ -136,6 +153,8 @@ export function FloatingPetals({ count = 30, className = "" }: { count?: number;
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [count]);
 

@@ -1,7 +1,7 @@
 {
   "content": [
     {
-      "id": "824d1cae-5774-49c7-8188-fd3a17a490bd",
+      "id": "6c39bcf8-413b-4984-af57-e900edd7510c",
       "slug": "a-quiet-tree",
       "title": "A Quiet Tree",
       "subtitle": "",
@@ -16,8 +16,8 @@
       "status": "draft",
       "is_homepage_featured": false,
       "version": 3,
-      "updated_at": "2026-11-04T22:14:21.636Z",
-      "created_at": "2026-11-04T22:14:21.619Z"
+      "updated_at": "2026-11-05T09:05:20.421Z",
+      "created_at": "2026-11-05T09:05:20.413Z"
     },
     {
       "id": "7afddac2-57d5-460f-997b-e26a77eba947",
@@ -326,13 +326,13 @@
   ],
   "revisions": [
     {
-      "id": "0c697a5f-a489-4847-ab3b-ea2ff9cddcb7",
-      "item_id": "824d1cae-5774-49c7-8188-fd3a17a490bd",
+      "id": "2e866bb1-623d-4b19-a2c6-5773f5993a8d",
+      "item_id": "6c39bcf8-413b-4984-af57-e900edd7510c",
       "item_type": "poem",
       "version": 2,
       "change_summary": "Pre-restore snapshot before restoring v1",
       "snapshot": {
-        "id": "824d1cae-5774-49c7-8188-fd3a17a490bd",
+        "id": "6c39bcf8-413b-4984-af57-e900edd7510c",
         "slug": "a-quiet-tree",
         "title": "A Quiet Tree (Revised)",
         "subtitle": "",
@@ -347,20 +347,20 @@
         "status": "published",
         "is_homepage_featured": false,
         "version": 2,
-        "updated_at": "2026-11-04T22:14:21.629Z",
-        "created_at": "2026-11-04T22:14:21.619Z"
+        "updated_at": "2026-11-05T09:05:20.418Z",
+        "created_at": "2026-11-05T09:05:20.413Z"
       },
       "editor_name": "Linda",
-      "created_at": "2026-11-04T22:14:21.636Z"
+      "created_at": "2026-11-05T09:05:20.421Z"
     },
     {
-      "id": "b3f99294-de74-48ff-8181-4af49bea9749",
-      "item_id": "824d1cae-5774-49c7-8188-fd3a17a490bd",
+      "id": "9d23b19c-cbd4-44ef-90f1-bc70be2a4be2",
+      "item_id": "6c39bcf8-413b-4984-af57-e900edd7510c",
       "item_type": "poem",
       "version": 1,
       "change_summary": "Updated: A Quiet Tree (Revised)",
       "snapshot": {
-        "id": "824d1cae-5774-49c7-8188-fd3a17a490bd",
+        "id": "6c39bcf8-413b-4984-af57-e900edd7510c",
         "slug": "a-quiet-tree",
         "title": "A Quiet Tree",
         "subtitle": "",
@@ -375,11 +375,11 @@
         "status": "draft",
         "is_homepage_featured": false,
         "version": 1,
-        "updated_at": "2026-11-04T22:14:21.619Z",
-        "created_at": "2026-11-04T22:14:21.619Z"
+        "updated_at": "2026-11-05T09:05:20.413Z",
+        "created_at": "2026-11-05T09:05:20.413Z"
       },
       "editor_name": "Linda",
-      "created_at": "2026-11-04T22:14:21.629Z"
+      "created_at": "2026-11-05T09:05:20.418Z"
     },
     {
       "id": "1bdee101-3dda-45e8-be64-f1559a2852bc",
@@ -612,17 +612,17 @@
       "metric_date": "2026-11-04",
       "path": "/poems/stones",
       "content_type": "poem",
-      "page_views": 50,
-      "engaged_reads": 42,
-      "share_events": 13
+      "page_views": 49,
+      "engaged_reads": 41,
+      "share_events": 12
     },
     {
       "id": "640d8aa5-bba9-4edb-89cb-7840b1c8ab1c",
       "metric_date": "2026-11-04",
       "path": "/",
       "content_type": "page",
-      "page_views": 23,
-      "engaged_reads": 9,
+      "page_views": 26,
+      "engaged_reads": 10,
       "share_events": 0
     },
     {
@@ -696,6 +696,42 @@
       "page_views": 1,
       "engaged_reads": 0,
       "share_events": 0
+    },
+    {
+      "id": "a0b2bdb2-4028-497c-8f4b-8c7aa5267343",
+      "metric_date": "2026-11-05",
+      "path": "/",
+      "content_type": "page",
+      "page_views": 4,
+      "engaged_reads": 2,
+      "share_events": 0
+    },
+    {
+      "id": "39998e40-dbc2-4e6c-90e0-2feef3fa6b4b",
+      "metric_date": "2026-11-05",
+      "path": "/poems/stones",
+      "content_type": "poem",
+      "page_views": 3,
+      "engaged_reads": 2,
+      "share_events": 1
+    },
+    {
+      "id": "6087b91b-3af4-4def-8cd8-0bc11a93b7a8",
+      "metric_date": "2026-11-05",
+      "path": "/stories/at-the-threshold",
+      "content_type": "story",
+      "page_views": 2,
+      "engaged_reads": 1,
+      "share_events": 0
+    },
+    {
+      "id": "504fcacf-fbf2-40ef-ae39-241c6cfe7b28",
+      "metric_date": "2026-11-05",
+      "path": "/audio-stories",
+      "content_type": "page",
+      "page_views": 2,
+      "engaged_reads": 1,
+      "share_events": 0
     }
   ],
   "subscribers": [
@@ -710,13 +746,13 @@
   ],
   "messages": [
     {
-      "id": "a1d7a7fa-4ecc-4dcc-8ef8-ecfed96e324b",
+      "id": "446bb5ef-0ab0-49e9-9997-d9e9fc54be28",
       "sender_name": "Eleni Vance",
       "sender_email": "eleni@press.org",
       "inquiry_category": "Literary Representation",
       "message": "Inquiry regarding collection rights.",
       "is_read": false,
-      "created_at": "2026-11-04T22:14:21.648Z"
+      "created_at": "2026-11-05T09:05:20.430Z"
     },
     {
       "id": "3eacd990-abba-4246-a766-36f8d0ab76fc",
@@ -840,6 +876,12 @@
       "email": "linda@houseofwildink.com",
       "role": "Owner",
       "expiresAt": 1793914031461
+    },
+    {
+      "token": "1c2f06d081106dc5aa9e35d1c65faa2ecb96c9cf5305c54dc4cb0c0cdb764fa5",
+      "email": "linda@houseofwildink.com",
+      "role": "Owner",
+      "expiresAt": 1793916955169
     }
   ]
 }

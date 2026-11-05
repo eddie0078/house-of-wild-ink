@@ -7,6 +7,7 @@ import { FloralDivider } from "@/components/FloralDivider";
 import { FloralGarland } from "@/components/FloralGarland";
 import { FloatingPetals } from "@/components/FloatingPetals";
 import { SoundwaveIcon } from "@/components/SoundwaveIcon";
+import { AudioPlayButton } from "@/components/AudioPlayButton";
 import {
   BougainvilleaBractCluster,
   BougainvilleaPhotoSprig,
@@ -391,18 +392,23 @@ export default function HomePage() {
                           </p>
                         </div>
 
-                        <div className="pt-4 border-t border-[rgba(197,160,89,0.2)] flex items-center justify-between">
-                          <Link
-                            href={`/audio-stories/${audio.slug}`}
-                            className="text-xs font-serif text-[#182C25] hover:text-[#D81E28]"
-                          >
-                            Companion Notes →
-                          </Link>
+                        <div className="pt-4 border-t border-[rgba(197,160,89,0.2)] flex items-center justify-between gap-2">
+                          <AudioPlayButton
+                            track={{
+                              id: audio.id,
+                              title: audio.title,
+                              subtitle: audio.subtitle,
+                              narrator: audio.narrator_credit,
+                              coverUrl: cover,
+                              youtubeUrl: yt,
+                              duration: audio.audio_duration,
+                            }}
+                          />
                           <a
                             href={yt}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D81E28] text-white text-xs font-semibold hover:bg-[#b51720] transition shadow-xs cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D81E28] text-white text-xs font-semibold hover:bg-[#b51720] transition shadow-xs cursor-pointer"
                           >
                             <Play className="w-3 h-3 fill-white" />
                             <span>YouTube ↗</span>

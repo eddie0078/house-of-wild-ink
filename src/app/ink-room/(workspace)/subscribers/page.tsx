@@ -1,6 +1,7 @@
 import React from "react";
+import Link from "next/link";
 import { db } from "@/lib/db";
-import { Users2, CheckCircle, Mail } from "lucide-react";
+import { Users2, CheckCircle, Mail, Send, Feather } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -9,16 +10,26 @@ export default function InkRoomSubscribersPage() {
 
   return (
     <div className="space-y-8">
-      <div className="pb-4 border-b border-brand-gold/30">
-        <span className="text-xs font-sans tracking-widest uppercase text-brand-coral font-semibold">
-          Audience
-        </span>
-        <h1 className="font-display text-3xl font-bold text-brand-forest">
-          Subscriber Roll ({subscribers.length})
-        </h1>
-        <p className="font-reading text-sm text-brand-forest/80 italic mt-0.5">
-          First-party readers who have consented to receive literary letters directly from House of Wild Ink.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-gold/30">
+        <div>
+          <span className="text-xs font-sans tracking-widest uppercase text-brand-coral font-semibold">
+            Audience
+          </span>
+          <h1 className="font-display text-3xl font-bold text-brand-forest">
+            Subscriber Roll ({subscribers.length})
+          </h1>
+          <p className="font-reading text-sm text-brand-forest/80 italic mt-0.5">
+            First-party readers who have consented to receive literary letters directly from House of Wild Ink.
+          </p>
+        </div>
+
+        <Link
+          href="/ink-room/subscribers/broadcast"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-coral hover:bg-brand-coral/90 text-brand-cream text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
+        >
+          <Feather className="w-3.5 h-3.5" />
+          <span>Compose Literary Letter</span>
+        </Link>
       </div>
 
       <div className="bg-brand-parchment rounded-2xl border border-brand-gold/30 overflow-hidden shadow-xs">

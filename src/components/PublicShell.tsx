@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Navigation } from "./Navigation";
 import { Footer } from "./Footer";
+import { AudioProvider } from "@/lib/AudioContext";
+import { FloatingAudioPlayer } from "./FloatingAudioPlayer";
 
 export function PublicShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -48,10 +50,13 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-parchment">
-      <Navigation />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
+    <AudioProvider>
+      <div className="min-h-screen flex flex-col bg-brand-parchment">
+        <Navigation />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <FloatingAudioPlayer />
+      </div>
+    </AudioProvider>
   );
 }

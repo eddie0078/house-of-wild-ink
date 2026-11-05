@@ -13,6 +13,9 @@ import {
   Loader2,
   Clock,
   Sparkles,
+  Eye,
+  Monitor,
+  Smartphone,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -37,6 +40,8 @@ function EssayEditorContent() {
   const [seoDescription, setSeoDescription] = useState("");
 
   const [saveState, setSaveState] = useState<"Saved" | "Saving..." | "Unsaved changes" | "Save failed">("Saved");
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
   const [collections, setCollections] = useState<Collection[]>([]);
 
   // Load existing essay or reflection
@@ -169,18 +174,31 @@ function EssayEditorContent() {
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowPreview(!showPreview)}
+            className={`px-3 py-2 rounded-xl text-xs font-sans font-semibold tracking-wider uppercase border transition-all flex items-center gap-1.5 cursor-pointer ${
+              showPreview
+                ? "bg-brand-forest text-brand-cream border-brand-forest"
+                : "bg-brand-parchment text-brand-forest border-brand-gold/40 hover:bg-brand-cream"
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>{showPreview ? "Hide Preview" : "Live Preview"}</span>
+          </button>
+
           <button
             type="button"
             onClick={() => handleSave("draft")}
-            className="px-4 py-2 rounded-full border border-brand-forest/30 text-brand-forest hover:bg-brand-parchment text-xs font-semibold uppercase tracking-wider cursor-pointer"
+            className="px-3.5 py-2 rounded-xl border border-brand-forest/30 text-brand-forest hover:bg-brand-parchment text-xs font-semibold uppercase tracking-wider cursor-pointer"
           >
             Save Draft
           </button>
           <button
             type="button"
             onClick={() => handleSave("published")}
-            className="px-5 py-2 rounded-full bg-brand-coral hover:bg-brand-coral/90 text-brand-cream text-xs font-semibold uppercase tracking-wider shadow-sm flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-brand-coral hover:bg-brand-coral/90 text-brand-cream text-xs font-semibold uppercase tracking-wider shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
             <Save className="w-3.5 h-3.5" />
             <span>Publish Essay</span>
@@ -189,9 +207,9 @@ function EssayEditorContent() {
       </div>
 
       {/* Editor Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className={`grid grid-cols-1 ${showPreview ? "lg:grid-cols-2" : "lg:grid-cols-3"} gap-8`}>
         {/* Left Column: Form Fields & Writing Canvas */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className={`${showPreview ? "lg:col-span-1" : "lg:col-span-2"} space-y-6`}>
           {/* Format Selector */}
           <div className="flex items-center gap-3 bg-brand-parchment p-2 rounded-xl border border-brand-gold/30">
             <span className="text-xs font-sans font-semibold uppercase tracking-wider text-brand-forest px-3">
@@ -365,6 +383,95 @@ function EssayEditorContent() {
             </div>
           </div>
         </div>
+
+        {/* Live Device Preview Pane */}
+        {showPreview && (
+          <div className="lg:col-span-1 bg-brand-parchment p-6 rounded-2xl border-2 border-brand-gold/50 shadow-md">
+            <div className="flex items-center justify-between pb-3 mb-4 border-b border-brand-gold/20">
+              <span className="text-xs font-sans font-bold uppercase tracking-wider text-brand-forest flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5 text-brand-coral" />
+                <span>Live Reader Preview</span>
+              </span>
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => setPreviewDevice("desktop")}
+                  className={`p-1.5 rounded cursor-pointer ${
+                    previewDevice === "desktop" ? "bg-brand-forest text-brand-cream" : "text-brand-forest/60"
+                  }`}
+                  title="Desktop Preview"
+                >
+                  <Monitor className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreviewDevice("mobile")}
+                  className={`p-1.5 rounded cursor-pointer ${
+                    previewDevice === "mobile" ? "bg-brand-forest text-brand-cream" : "text-brand-forest/60"
+                  }`}
+                  title="Mobile Viewport Preview"
+                >
+                  <Smartphone className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div
+              className={`mx-auto bg-brand-cream rounded-xl p-6 border border-brand-gold/30 shadow-inner overflow-x-auto ${
+                previewDevice === "mobile" ? "max-w-[340px]" : "w-full"
+              }`}
+            >
+              <div className="text-center mb-6">
+                <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-brand-coral">
+                  {contentType} · {readingTime} min read
+                </span>
+                <h3 className="font-display text-2xl font-bold text-brand-ink mt-1">
+                  {title || "Untitled Essay"}
+                </h3>
+                {subtitle && (
+                  <p className="font-reading italic text-xs text-brand-forest/70 mt-1">
+                    {subtitle}
+                  </p>
+                )}
+                <p className="font-sans text-[10px] text-brand-forest/60 uppercase tracking-widest mt-2">
+                  By {authorCredit}
+                </p>
+              </div>
+
+              {coverImageUrl && (
+                <div className="mb-4 rounded-lg overflow-hidden border border-brand-gold/30">
+                  <img
+                    src={coverImageUrl}
+                    alt={title}
+                    className="w-full h-32 object-cover"
+                  />
+                </div>
+              )}
+
+              <div className="font-reading text-sm text-[#182C25] leading-relaxed space-y-3">
+                {rawContent
+                  ? rawContent
+                      .split("\n\n")
+                      .filter(Boolean)
+                      .map((p, idx) => (
+                        <p
+                          key={idx}
+                          className={idx === 0 ? "drop-cap leading-relaxed" : "leading-relaxed"}
+                        >
+                          {p}
+                        </p>
+                      ))
+                  : "Your essay or article prose will render here with elegant drop-caps and reading typography..."}
+              </div>
+
+              {authorNote && (
+                <div className="mt-6 pt-4 border-t border-brand-gold/20 font-reading italic text-xs text-brand-forest/80">
+                  Author’s Note: {authorNote}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

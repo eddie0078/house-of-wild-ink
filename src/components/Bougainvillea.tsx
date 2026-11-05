@@ -65,6 +65,8 @@ export const BOUGAINVILLEA_COLORS: Record<BougainvilleaColor, ColorConfig> = {
   },
 };
 
+export const BOUGAINVILLEA_PALETTE = BOUGAINVILLEA_COLORS;
+
 /**
  * High-craft SVG cluster of delicate, paper-thin Bougainvillea bracts
  */

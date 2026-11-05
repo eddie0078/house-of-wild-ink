@@ -6,6 +6,7 @@ import { PublicShell } from "@/components/PublicShell";
 import { FloralDivider } from "@/components/FloralDivider";
 import { SoundwaveIcon } from "@/components/SoundwaveIcon";
 import { BougainvilleaBractCluster, BougainvilleaDivider } from "@/components/Bougainvillea";
+import { AudioPlayButton } from "@/components/AudioPlayButton";
 import { Headphones, ExternalLink, Play, Clock, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -125,24 +126,29 @@ export default function AudioStoriesPage() {
                     </div>
 
                     {/* Action Bar */}
-                    <div className="pt-6 mt-6 border-t border-[rgba(197,160,89,0.25)] flex items-center justify-between gap-3">
-                      <Link
-                        href={`/audio-stories/${story.slug}`}
-                        className="text-xs font-serif font-medium text-[#182C25] hover:text-[#C85A46] transition-colors"
-                      >
-                        Read Notes →
-                      </Link>
+                    <div className="pt-5 mt-5 border-t border-[rgba(197,160,89,0.25)] flex flex-wrap items-center justify-between gap-2.5">
+                      {/* Play in Floating Player */}
+                      <AudioPlayButton
+                        track={{
+                          id: story.id,
+                          title: story.title,
+                          subtitle: story.subtitle,
+                          narrator: story.narrator_credit,
+                          coverUrl,
+                          youtubeUrl,
+                          duration: story.audio_duration,
+                        }}
+                      />
 
                       {/* Primary Call to Action: Listen on YouTube */}
                       <a
                         href={youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C85A46] text-white text-xs font-semibold hover:bg-[#b04a38] transition-all shadow-sm hover:shadow-md cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D81E28] text-white text-xs font-semibold hover:bg-[#b51720] transition-all shadow-xs cursor-pointer"
                       >
-                        <Play className="w-3.5 h-3.5 fill-white" />
-                        <span>Listen on YouTube</span>
-                        <ExternalLink className="w-3 h-3 opacity-80" />
+                        <Play className="w-3 h-3 fill-white" />
+                        <span>YouTube ↗</span>
                       </a>
                     </div>
                   </div>

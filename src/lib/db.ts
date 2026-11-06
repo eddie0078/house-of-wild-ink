@@ -692,26 +692,63 @@ class Database {
     return newUser;
   }
 
-  // --- Sessions ---
+  // --- Sessions (Stateless HMAC & Serverless Compatible) ---
   createSession(email: string, role: string): string {
-    const token = crypto.randomBytes(32).toString("hex");
+    const sessionSecret = process.env.OWNER_ACCESS_KEY || "WildInk2026!AuthorVault_SecretSessionSigner";
     const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
-    this.data.activeSessions.push({ token, email, role, expiresAt });
-    this.persist();
+    const payload = JSON.stringify({ email, role, expiresAt });
+    const b64Payload = Buffer.from(payload).toString("base64url");
+    const signature = crypto.createHmac("sha256", sessionSecret).update(b64Payload).digest("base64url");
+    const token = `${b64Payload}.${signature}`;
+
+    try {
+      this.data.activeSessions.push({ token, email, role, expiresAt });
+      this.persist();
+    } catch {}
+
     return token;
   }
 
   validateSession(token: string): { email: string; role: string } | null {
-    this.data = this.load();
-    const now = Date.now();
-    const session = this.data.activeSessions.find((s) => s.token === token && s.expiresAt > now);
-    if (!session) return null;
-    return { email: session.email, role: session.role };
+    if (!token || typeof token !== "string") return null;
+
+    // 1. Verify stateless HMAC signed token (works reliably across all Vercel serverless lambda instances)
+    if (token.includes(".")) {
+      const parts = token.split(".");
+      if (parts.length === 2) {
+        const [b64Payload, signature] = parts;
+        const sessionSecret = process.env.OWNER_ACCESS_KEY || "WildInk2026!AuthorVault_SecretSessionSigner";
+        const expectedSignature = crypto.createHmac("sha256", sessionSecret).update(b64Payload).digest("base64url");
+        if (
+          signature.length === expectedSignature.length &&
+          crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))
+        ) {
+          try {
+            const payload = JSON.parse(Buffer.from(b64Payload, "base64url").toString("utf8"));
+            if (payload && payload.expiresAt > Date.now()) {
+              return { email: payload.email, role: payload.role };
+            }
+          } catch {}
+        }
+      }
+    }
+
+    // 2. Legacy activeSessions in-memory/file fallback
+    try {
+      this.data = this.load();
+      const now = Date.now();
+      const session = this.data.activeSessions?.find((s) => s.token === token && s.expiresAt > now);
+      if (session) return { email: session.email, role: session.role };
+    } catch {}
+
+    return null;
   }
 
   destroySession(token: string) {
-    this.data.activeSessions = this.data.activeSessions.filter((s) => s.token !== token);
-    this.persist();
+    try {
+      this.data.activeSessions = this.data.activeSessions.filter((s) => s.token !== token);
+      this.persist();
+    } catch {}
   }
 
   // --- Newsletter Subscribers ---

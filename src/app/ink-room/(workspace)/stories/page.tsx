@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { BookOpen, Plus, Sparkles, Theater } from "lucide-react";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 
 export const dynamic = "force-dynamic";
 
@@ -99,6 +100,13 @@ export default function InkRoomStoriesPage() {
                       View Live
                     </Link>
                   )}
+                  <DeleteActionButton
+                    id={story.id}
+                    title={story.title}
+                    itemType={isDrama ? "drama" : "story"}
+                    variant="button"
+                    label="Delete"
+                  />
                 </div>
               </div>
             );

@@ -47,3 +47,47 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || "Failed to save content" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const auth = await getInkRoomSession();
+    if (!auth.isAuthenticated || !auth.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Role permission check
+    if (!hasPermission(auth.user.role, "delete")) {
+      return NextResponse.json(
+        { error: `Your role (${auth.user.role}) cannot perform the 'delete' action.` },
+        { status: 403 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json({ error: "Content ID is required" }, { status: 400 });
+    }
+
+    const item = db.getContentById(id);
+    if (!item) {
+      return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    }
+
+    // Create a safety revision snapshot in the vault before deletion so it can be restored
+    try {
+      db.saveRevision(id, item.content_type, item, `Pre-deletion safety snapshot of '${item.title}'`);
+    } catch (err) {
+      console.warn("Failed to create pre-deletion revision snapshot:", err);
+    }
+
+    const success = db.deleteContentItem(id);
+    if (!success) {
+      return NextResponse.json({ error: "Failed to delete item from database" }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, message: `Successfully deleted "${item.title}".` });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || "Failed to delete content" }, { status: 500 });
+  }
+}

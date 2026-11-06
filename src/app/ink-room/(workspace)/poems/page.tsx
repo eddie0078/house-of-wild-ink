@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { Feather, Plus, CheckCircle, Clock, Sparkles, Trash2, ArrowRight } from "lucide-react";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 
 export const dynamic = "force-dynamic";
 
@@ -98,6 +99,13 @@ export default function InkRoomPoemsPage() {
                       View Live
                     </Link>
                   )}
+                  <DeleteActionButton
+                    id={poem.id}
+                    title={poem.title}
+                    itemType="poem"
+                    variant="button"
+                    label="Delete"
+                  />
                 </div>
               </div>
             );

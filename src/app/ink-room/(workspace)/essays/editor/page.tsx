@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ContentItem, Collection, ContentType } from "@/lib/types";
 import { ImageUploadField } from "@/components/ImageUploadField";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 import {
   FileText,
   Save,
@@ -203,6 +204,17 @@ function EssayEditorContent() {
             <Save className="w-3.5 h-3.5" />
             <span>Publish Essay</span>
           </button>
+
+          {editId && (
+            <DeleteActionButton
+              id={editId}
+              title={title || "Untitled Essay"}
+              itemType="essay"
+              variant="button"
+              label="Delete"
+              redirectAfterDelete="/ink-room/essays"
+            />
+          )}
         </div>
       </div>
 

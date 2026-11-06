@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { db } from "@/lib/db";
 import { FileText, Plus, Clock, Edit, Sparkles } from "lucide-react";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 
 export const dynamic = "force-dynamic";
 
@@ -115,13 +116,22 @@ export default function InkRoomEssaysIndexPage() {
                       {essay.reading_time_minutes} min read
                     </span>
 
-                    <Link
-                      href={`/ink-room/essays/editor?id=${essay.id}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-brand-forest text-brand-cream text-xs font-semibold hover:bg-brand-forest/90 transition"
-                    >
-                      <Edit className="w-3 h-3" />
-                      <span>Edit Essay</span>
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/ink-room/essays/editor?id=${essay.id}`}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-brand-forest text-brand-cream text-xs font-semibold hover:bg-brand-forest/90 transition"
+                      >
+                        <Edit className="w-3 h-3" />
+                        <span>Edit</span>
+                      </Link>
+                      <DeleteActionButton
+                        id={essay.id}
+                        title={essay.title}
+                        itemType="essay"
+                        variant="button"
+                        label="Delete"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

@@ -5105,7 +5105,7 @@
       "sort_order": 1,
       "status": "published",
       "created_at": "2026-11-04T19:57:26.496Z",
-      "updated_at": "2026-11-06T10:00:00.000Z",
+      "updated_at": "2026-11-06T19:02:09.139Z",
       "portrait_media_id": "media-linda-portrait",
       "awards": [
         {
@@ -5139,7 +5139,37 @@
       "created_at": "2026-11-04T21:13:11.127Z"
     }
   ],
-  "revisions": [],
+  "revisions": [
+    {
+      "id": "d7653199-f229-4389-8ab2-939ce57aa9b5",
+      "item_id": "a3902185-0257-4c9d-9f74-621cb6a7f940",
+      "item_type": "poem",
+      "version": 1,
+      "change_summary": "Pre-deletion safety snapshot of 'Ephemeral Test Poem'",
+      "snapshot": {
+        "id": "a3902185-0257-4c9d-9f74-621cb6a7f940",
+        "slug": "ephemeral-test-poem",
+        "title": "Ephemeral Test Poem",
+        "subtitle": "",
+        "content_type": "poem",
+        "raw_content": "Words written on the shore,\nEased away by the incoming tide.",
+        "structured_body": [],
+        "excerpt": "Words written on the shore,\nEased away by the incoming tide.",
+        "author_credit": "Test Author",
+        "alignment": "left",
+        "reading_time_minutes": 1,
+        "tags": [],
+        "collection_id": "0af63ef2-02c7-4e5a-8683-10eff2db2185",
+        "status": "draft",
+        "is_homepage_featured": false,
+        "version": 1,
+        "updated_at": "2026-11-06T19:01:42.385Z",
+        "created_at": "2026-11-06T19:01:42.385Z"
+      },
+      "editor_name": "Linda",
+      "created_at": "2026-11-06T19:01:42.412Z"
+    }
+  ],
   "analytics": [
     {
       "id": "stat-init-1",
@@ -5191,9 +5221,9 @@
       "metric_date": "2026-11-06",
       "path": "/poems/stones",
       "content_type": "poem",
-      "page_views": 2,
-      "engaged_reads": 2,
-      "share_events": 2
+      "page_views": 9,
+      "engaged_reads": 9,
+      "share_events": 9
     }
   ],
   "subscribers": [],
@@ -5267,6 +5297,18 @@
       "email": "lindaemefadaniels@gmail.com",
       "role": "Owner",
       "expiresAt": 1794044611542
+    },
+    {
+      "token": "eyJlbWFpbCI6ImxpbmRhZW1lZmFkYW5pZWxzQGdtYWlsLmNvbSIsInJvbGUiOiJPd25lciIsImV4cGlyZXNBdCI6MTc5NDA0NjU5Mzc0OX0.Sh_13AYYnlL8Ng_drMQ4QPJxoN2oXt-kVWqGwC6u4iI",
+      "email": "lindaemefadaniels@gmail.com",
+      "role": "Owner",
+      "expiresAt": 1794046593749
+    },
+    {
+      "token": "eyJlbWFpbCI6ImxpbmRhZW1lZmFkYW5pZWxzQGdtYWlsLmNvbSIsInJvbGUiOiJPd25lciIsImV4cGlyZXNBdCI6MTc5NDA3Nzg1OTg2NX0.eK_iGI8axNVYunPwi3QttgfwKs4_JGhr2fEgZ_sw-yQ",
+      "email": "lindaemefadaniels@gmail.com",
+      "role": "Owner",
+      "expiresAt": 1794077859865
     }
   ]
 }

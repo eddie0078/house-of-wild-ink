@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { Collection, ContentItem } from "@/lib/types";
-import { Layers, Plus, ArrowUp, ArrowDown, Save, Eye, Sparkles, Check, Loader2 } from "lucide-react";
+import { Layers, Plus, ArrowUp, ArrowDown, Save, Eye, Sparkles, Check, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 
 export default function InkRoomCollectionsPage() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -160,26 +161,46 @@ export default function InkRoomCollectionsPage() {
           </span>
           <div className="space-y-2">
             {collections.map((c) => (
-              <button
+              <div
                 key={c.id}
-                type="button"
-                onClick={() => selectCollection(c)}
-                className={`w-full text-left p-4 rounded-xl border transition-all ${
+                className={`w-full flex items-center justify-between p-3.5 rounded-xl border transition-all ${
                   selectedColl?.id === c.id
                     ? "bg-brand-parchment border-brand-gold shadow-xs"
                     : "bg-brand-cream border-brand-gold/20 hover:border-brand-gold/50"
                 }`}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-display text-base font-bold text-brand-forest">{c.title}</h4>
-                  <span className="text-[10px] font-sans uppercase font-bold text-brand-coral">
-                    {c.item_ids.length} works
-                  </span>
-                </div>
-                {c.subtitle && (
-                  <p className="font-sans text-xs text-brand-forest/70 italic line-clamp-1">{c.subtitle}</p>
-                )}
-              </button>
+                <button
+                  type="button"
+                  onClick={() => selectCollection(c)}
+                  className="flex-1 text-left min-w-0 mr-2 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="font-display text-base font-bold text-brand-forest truncate">{c.title}</h4>
+                    <span className="text-[10px] font-sans uppercase font-bold text-brand-coral shrink-0 ml-2">
+                      {c.item_ids.length} works
+                    </span>
+                  </div>
+                  {c.subtitle && (
+                    <p className="font-sans text-xs text-brand-forest/70 italic line-clamp-1">{c.subtitle}</p>
+                  )}
+                </button>
+
+                <DeleteActionButton
+                  id={c.id}
+                  title={c.title}
+                  itemType="collection"
+                  endpoint="/api/collections"
+                  variant="icon"
+                  size="sm"
+                  onDeleted={() => {
+                    if (selectedColl?.id === c.id) {
+                      setSelectedColl(null);
+                      handleCreateNew();
+                    }
+                    loadData();
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -366,7 +387,7 @@ export default function InkRoomCollectionsPage() {
             </div>
 
             {/* Submit */}
-            <div className="pt-4 border-t border-brand-gold/20 flex items-center justify-between">
+            <div className="pt-4 border-t border-brand-gold/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <label className="flex items-center gap-2 text-xs font-sans text-brand-forest cursor-pointer">
                 <input
                   type="checkbox"
@@ -377,23 +398,41 @@ export default function InkRoomCollectionsPage() {
                 <span>Feature on Homepage</span>
               </label>
 
-              <button
-                type="submit"
-                disabled={saving}
-                className="px-6 py-2.5 rounded-xl bg-brand-forest text-brand-cream text-xs font-sans font-semibold tracking-wider uppercase hover:bg-brand-forest/90 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
-              >
-                {saving ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Saving...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-3.5 h-3.5 text-brand-gold-light" />
-                    <span>Save Collection</span>
-                  </>
+              <div className="flex items-center gap-3">
+                {selectedColl && !isCreating && (
+                  <DeleteActionButton
+                    id={selectedColl.id}
+                    title={selectedColl.title}
+                    itemType="collection"
+                    endpoint="/api/collections"
+                    variant="button"
+                    label="Delete Collection"
+                    onDeleted={() => {
+                      setSelectedColl(null);
+                      handleCreateNew();
+                      loadData();
+                    }}
+                  />
                 )}
-              </button>
+
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="px-6 py-2.5 rounded-xl bg-brand-forest text-brand-cream text-xs font-sans font-semibold tracking-wider uppercase hover:bg-brand-forest/90 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-3.5 h-3.5 text-brand-gold-light" />
+                      <span>Save Collection</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>

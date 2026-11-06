@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { ContentItem, Collection } from "@/lib/types";
 import { ImageUploadField } from "@/components/ImageUploadField";
 import { SoundwaveIcon } from "@/components/SoundwaveIcon";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 import {
   Headphones,
   Save,
@@ -181,6 +182,17 @@ function AudioStoryEditorContent() {
             <Save className="w-3.5 h-3.5" />
             <span>Publish Audio Story</span>
           </button>
+
+          {editId && (
+            <DeleteActionButton
+              id={editId}
+              title={title || "Untitled Audio Piece"}
+              itemType="audio story"
+              variant="button"
+              label="Delete"
+              redirectAfterDelete="/ink-room/audio"
+            />
+          )}
         </div>
       </div>
 

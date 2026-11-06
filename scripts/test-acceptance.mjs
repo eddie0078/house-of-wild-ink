@@ -209,6 +209,71 @@ assert.ok(lindaProfile.awards && lindaProfile.awards.length > 0, "Linda's Sophia
 assert.ok(lindaProfile.awards[0].title.includes("Sophia Lokko"), "Must include Sophia Lokko Memorial Prize");
 console.log("✓ TEST 14 PASSED: Complete Google Site archive verified (34+ poems, plays, novella, honors).\n");
 
+// TEST 15: Safe Content & Collection Deletion with Cross-Reference Scrubbing & Vault Revisions
+console.log("TEST 15: Testing Safe Content & Collection Deletion with Vault Snapshots...");
+// 1. Create mock collection
+const testColl = db.saveCollection({
+  title: "Temporary Test Volume",
+  description: "A transient collection for testing deletion safety",
+  item_ids: []
+});
+assert.ok(testColl.id, "Mock collection must be created");
+
+// 2. Create mock content item linked to mock collection
+const testItemToDelete = db.saveContentItem({
+  title: "Ephemeral Test Poem",
+  content_type: "poem",
+  raw_content: "Words written on the shore,\nEased away by the incoming tide.",
+  author_credit: "Test Author",
+  collection_id: testColl.id,
+  status: "draft"
+});
+assert.ok(testItemToDelete.id, "Mock poem must be created");
+
+// Link item to collection and author profile
+testColl.item_ids = [testItemToDelete.id];
+db.saveCollection(testColl);
+if (!lindaProfile.selected_work_ids) lindaProfile.selected_work_ids = [];
+lindaProfile.selected_work_ids.push(testItemToDelete.id);
+db.savePerson(lindaProfile);
+
+// Verify cross-references exist
+const collBefore = db.getCollectionById(testColl.id);
+assert.ok(collBefore.item_ids.includes(testItemToDelete.id), "Poem ID must be in collection item_ids");
+const profileBefore = db.getPeople().find(p => p.slug === "linda-emefa-daniels");
+assert.ok(profileBefore.selected_work_ids.includes(testItemToDelete.id), "Poem ID must be in author selected_work_ids");
+
+// 3. Save pre-deletion snapshot in vault revision history
+db.saveRevision(testItemToDelete.id, testItemToDelete.content_type, testItemToDelete, `Pre-deletion safety snapshot of '${testItemToDelete.title}'`);
+const safetyRevisions = db.getRevisions(testItemToDelete.id);
+assert.ok(safetyRevisions.length >= 1, "Revision snapshot must be saved in vault before deletion");
+
+// 4. Delete the content item
+const deleteItemSuccess = db.deleteContentItem(testItemToDelete.id);
+assert.strictEqual(deleteItemSuccess, true, "deleteContentItem must return true");
+
+// Verify item is removed
+const deletedItem = db.getContentById(testItemToDelete.id);
+assert.strictEqual(deletedItem, undefined, "Deleted item must no longer exist in content");
+
+// Verify cross-references are scrubbed cleanly
+const collAfter = db.getCollectionById(testColl.id);
+assert.strictEqual(collAfter.item_ids.includes(testItemToDelete.id), false, "Deleted item ID must be scrubbed from collection item_ids");
+const profileAfter = db.getPeople().find(p => p.slug === "linda-emefa-daniels");
+assert.strictEqual(profileAfter.selected_work_ids.includes(testItemToDelete.id), false, "Deleted item ID must be scrubbed from author selected_work_ids");
+
+// 5. Delete the collection
+const deleteCollSuccess = db.deleteCollection(testColl.id);
+assert.strictEqual(deleteCollSuccess, true, "deleteCollection must return true");
+const deletedColl = db.getCollectionById(testColl.id);
+assert.strictEqual(deletedColl, undefined, "Deleted collection must no longer exist");
+
+// Clean up test revision snapshot
+db.data.revisions = db.data.revisions.filter(r => r.item_id !== testItemToDelete.id);
+db.persist();
+
+console.log("✓ TEST 15 PASSED: Deletion removes records, scrubs cross-references, and preserves vault revisions.\n");
+
 console.log("=================================================");
-console.log("ALL 14 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
+console.log("ALL 15 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
 console.log("=================================================");

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { db } from "@/lib/db";
 import { SoundwaveIcon } from "@/components/SoundwaveIcon";
 import { Headphones, Plus, ExternalLink, Clock, Play, Edit } from "lucide-react";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 
 export const dynamic = "force-dynamic";
 
@@ -119,13 +120,22 @@ export default function InkRoomAudioIndexPage() {
                       <span>YouTube Link ↗</span>
                     </a>
 
-                    <Link
-                      href={`/ink-room/audio/editor?id=${audio.id}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-brand-forest text-brand-cream text-xs font-semibold hover:bg-brand-forest/90 transition"
-                    >
-                      <Edit className="w-3 h-3" />
-                      <span>Edit Piece</span>
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/ink-room/audio/editor?id=${audio.id}`}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-brand-forest text-brand-cream text-xs font-semibold hover:bg-brand-forest/90 transition"
+                      >
+                        <Edit className="w-3 h-3" />
+                        <span>Edit</span>
+                      </Link>
+                      <DeleteActionButton
+                        id={audio.id}
+                        title={audio.title}
+                        itemType="audio story"
+                        variant="button"
+                        label="Delete"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

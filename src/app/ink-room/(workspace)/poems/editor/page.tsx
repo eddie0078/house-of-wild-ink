@@ -19,6 +19,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { ImageUploadField } from "@/components/ImageUploadField";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 import Link from "next/link";
 
 function PoemEditorContent() {
@@ -222,6 +223,17 @@ function PoemEditorContent() {
           >
             <span>Publish Now</span>
           </button>
+
+          {editId && (
+            <DeleteActionButton
+              id={editId}
+              title={title || "Untitled Poem"}
+              itemType="poem"
+              variant="button"
+              label="Delete"
+              redirectAfterDelete="/ink-room/poems"
+            />
+          )}
         </div>
       </div>
 

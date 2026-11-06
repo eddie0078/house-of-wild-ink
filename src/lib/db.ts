@@ -354,7 +354,20 @@ class Database {
       }
       const tmp = `${DB_FILE}.${crypto.randomBytes(4).toString("hex")}.tmp`;
       fs.writeFileSync(tmp, JSON.stringify(data, null, 2), "utf-8");
-      fs.renameSync(tmp, DB_FILE);
+      try {
+        fs.renameSync(tmp, DB_FILE);
+      } catch (renameErr) {
+        // Fallback for Windows file locks / OneDrive sync
+        try {
+          fs.copyFileSync(tmp, DB_FILE);
+          if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
+        } catch {
+          fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+          if (fs.existsSync(tmp)) {
+            try { fs.unlinkSync(tmp); } catch {}
+          }
+        }
+      }
     } catch (err) {
       console.error("Failed to save DB:", err);
     }
@@ -456,13 +469,28 @@ class Database {
   }
 
   deleteContentItem(id: string): boolean {
-    const prevLen = this.data.content.length;
+    const item = this.data.content.find((i) => i.id === id);
+    if (!item) return false;
+
+    // Remove from content list
     this.data.content = this.data.content.filter((i) => i.id !== id);
-    if (this.data.content.length !== prevLen) {
-      this.persist();
-      return true;
+
+    // Scrub from collections item_ids
+    for (const c of this.data.collections) {
+      if (c.item_ids && c.item_ids.includes(id)) {
+        c.item_ids = c.item_ids.filter((itemId) => itemId !== id);
+      }
     }
-    return false;
+
+    // Scrub from author profiles selected_work_ids
+    for (const p of this.data.people) {
+      if (p.selected_work_ids && p.selected_work_ids.includes(id)) {
+        p.selected_work_ids = p.selected_work_ids.filter((workId) => workId !== id);
+      }
+    }
+
+    this.persist();
+    return true;
   }
 
   // --- Collections ---
@@ -477,6 +505,26 @@ class Database {
 
   getCollectionBySlug(slug: string): Collection | undefined {
     return this.data.collections.find((c) => c.slug === slug);
+  }
+
+  getCollectionById(id: string): Collection | undefined {
+    return this.data.collections.find((c) => c.id === id);
+  }
+
+  deleteCollection(id: string): boolean {
+    const prevLen = this.data.collections.length;
+    this.data.collections = this.data.collections.filter((c) => c.id !== id);
+    if (this.data.collections.length !== prevLen) {
+      // Unlink collection_id from any content item that was categorized under it
+      for (const item of this.data.content) {
+        if (item.collection_id === id) {
+          delete item.collection_id;
+        }
+      }
+      this.persist();
+      return true;
+    }
+    return false;
   }
 
   saveCollection(coll: Partial<Collection> & { title: string }): Collection {
@@ -601,6 +649,30 @@ class Database {
   }
 
   // --- Revisions ---
+  saveRevision(
+    itemId: string,
+    contentType: string,
+    snapshot: any,
+    changeSummary: string,
+    editorName = "Linda"
+  ): Revision {
+    const revision: Revision = {
+      id: crypto.randomUUID(),
+      item_id: itemId,
+      item_type: (["poem", "story", "collection", "profile", "settings", "essay", "audio_story"].includes(contentType)
+        ? contentType
+        : "story") as any,
+      version: snapshot?.version || 1,
+      change_summary: changeSummary,
+      snapshot,
+      editor_name: editorName,
+      created_at: new Date().toISOString(),
+    };
+    this.data.revisions.unshift(revision);
+    this.persist();
+    return revision;
+  }
+
   getRevisions(itemId: string): Revision[] {
     return this.data.revisions.filter((r) => r.item_id === itemId);
   }

@@ -18,6 +18,7 @@ import {
   Theater,
 } from "lucide-react";
 import { ImageUploadField } from "@/components/ImageUploadField";
+import { DeleteActionButton } from "@/components/DeleteActionButton";
 import Link from "next/link";
 
 function StoryEditorContent() {
@@ -210,6 +211,17 @@ function StoryEditorContent() {
           >
             <span>Publish Work</span>
           </button>
+
+          {editId && (
+            <DeleteActionButton
+              id={editId}
+              title={title || "Untitled Piece"}
+              itemType={contentType === "short_drama" ? "drama" : "story"}
+              variant="button"
+              label="Delete"
+              redirectAfterDelete="/ink-room/stories"
+            />
+          )}
         </div>
       </div>
 

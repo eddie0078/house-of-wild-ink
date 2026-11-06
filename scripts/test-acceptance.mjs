@@ -89,8 +89,10 @@ assert.ok(restored, "Restore must succeed");
 assert.strictEqual(restored.version, 3, "Restoring must create a new version without deleting history");
 assert.strictEqual(restored.raw_content, "Test stanza line 1\nTest stanza line 2", "Restored content must match v1");
 
-// Clean up test scratch poem to keep production data clean
+// Clean up test scratch poem and revisions to keep production data clean
 db.deleteContentItem(testPoem.id);
+db.data.revisions = db.data.revisions.filter(r => r.item_id !== testPoem.id);
+db.persist();
 console.log("✓ TEST 5 PASSED: Revision history verified and test scratch cleaned up.\n");
 
 // TEST 6: First-Party Privacy-Conscious Analytics
@@ -184,6 +186,29 @@ const initialSubs = db.getSubscribers();
 assert.ok(Array.isArray(initialSubs), "Subscribers list must be accessible for broadcasts");
 console.log("✓ TEST 13 PASSED: Subscriber audience roll verified for letterpress broadcasts.\n");
 
+// TEST 14: Linda Emefa Daniels Google Site Archive Verification
+console.log("TEST 14: Verifying Ingested Google Site Literary Archive...");
+const publishedPoems = db.getContentItems({ type: "poem" });
+assert.ok(publishedPoems.length >= 34, `Expected at least 34 poems, found ${publishedPoems.length}`);
+
+const tarajiNovella = db.getContentBySlug("taraji-says-no-to-plastic");
+assert.ok(tarajiNovella, "Novella 'Taraji Says No to Plastic!' must be published");
+assert.strictEqual(tarajiNovella.author_credit, "Linda Emefa Daniels");
+
+const mySisterPlay = db.getContentBySlug("my-sister-my-bed-sharer");
+assert.ok(mySisterPlay, "Play 'My Sister, My Bed Sharer' must be published");
+assert.strictEqual(mySisterPlay.content_type, "short_drama");
+assert.ok(mySisterPlay.structured_body.length > 5, "Play must have structured scene blocks");
+
+const collections = db.getCollections();
+assert.ok(collections.length >= 4, `Expected at least 4 collections, found ${collections.length}`);
+
+const lindaProfile = db.getPeople().find(p => p.slug === "linda-emefa-daniels");
+assert.ok(lindaProfile, "Linda Emefa Daniels author profile must exist");
+assert.ok(lindaProfile.awards && lindaProfile.awards.length > 0, "Linda's Sophia Lokko Memorial Prize award must be present");
+assert.ok(lindaProfile.awards[0].title.includes("Sophia Lokko"), "Must include Sophia Lokko Memorial Prize");
+console.log("✓ TEST 14 PASSED: Complete Google Site archive verified (34+ poems, plays, novella, honors).\n");
+
 console.log("=================================================");
-console.log("ALL 13 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
+console.log("ALL 14 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
 console.log("=================================================");

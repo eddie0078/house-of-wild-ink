@@ -188,7 +188,7 @@ Listen for the echo.`,
   const initialUsers: UserAccount[] = [
     {
       id: "user-owner-linda",
-      email: "linda@houseofwildink.com",
+      email: "lindaemefadaniels@gmail.com",
       name: "Linda Emefa Daniels",
       role: "Owner",
       is_active: true,

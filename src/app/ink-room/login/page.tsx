@@ -7,7 +7,7 @@ import { ShieldCheck, UserCheck, AlertCircle, Loader2, Lock, ArrowRight } from "
 import Link from "next/link";
 
 export default function InkRoomLoginPage() {
-  const [email, setEmail] = useState("linda@houseofwildink.com");
+  const [email, setEmail] = useState("lindaemefadaniels@gmail.com");
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();

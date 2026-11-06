@@ -2,15 +2,15 @@
 
 import React, { useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
-import { Lock, KeyRound, AlertCircle, Loader2, ArrowRight, Copy, Check } from "lucide-react";
+import { Lock, KeyRound, AlertCircle, Loader2, ArrowRight, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 
 export default function InkRoomGatePage() {
-  const [accessKey, setAccessKey] = useState("WildInk2026!AuthorVault");
+  const [accessKey, setAccessKey] = useState("");
+  const [showKey, setShowKey] = useState(false);
   const [status, setStatus] = useState<"idle" | "submitting" | "locked" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [retrySec, setRetrySec] = useState<number | null>(null);
-  const [copiedKey, setCopiedKey] = useState(false);
 
   const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,12 +47,6 @@ export default function InkRoomGatePage() {
     }
   };
 
-  const copyKey = () => {
-    navigator.clipboard.writeText("WildInk2026!AuthorVault");
-    setCopiedKey(true);
-    setTimeout(() => setCopiedKey(false), 2000);
-  };
-
   return (
     <div className="min-h-screen bg-brand-forest text-brand-cream flex flex-col justify-between p-6">
       <header className="flex items-center justify-between max-w-5xl mx-auto w-full pt-4">
@@ -75,7 +69,7 @@ export default function InkRoomGatePage() {
           {/* Top gold threshold bar */}
           <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-forest via-brand-gold to-brand-coral" />
 
-          <div className="text-center mb-6">
+          <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-2xl bg-brand-forest text-brand-gold-light mx-auto flex items-center justify-center mb-4 shadow-md">
               <KeyRound className="w-8 h-8 text-brand-coral" />
             </div>
@@ -88,24 +82,6 @@ export default function InkRoomGatePage() {
             <p className="font-reading text-sm text-brand-forest/80 italic leading-relaxed">
               “A protected workspace for stories in the quiet before publication.”
             </p>
-          </div>
-
-          {/* Key Helper */}
-          <div className="mb-6 p-4 rounded-2xl bg-brand-cream border border-brand-gold/40 text-xs font-sans">
-            <div className="flex items-center justify-between font-bold text-brand-forest uppercase tracking-wider text-[11px] mb-1.5">
-              <span>Master Access Key:</span>
-              <button
-                type="button"
-                onClick={copyKey}
-                className="text-[10px] text-brand-coral hover:text-brand-forest transition-colors flex items-center gap-1 font-mono font-normal"
-              >
-                {copiedKey ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                {copiedKey ? "Copied" : "Copy Key"}
-              </button>
-            </div>
-            <code className="block bg-brand-parchment px-2.5 py-1.5 rounded-lg border border-brand-gold/30 font-mono text-[11px] text-brand-forest font-semibold select-all">
-              WildInk2026!AuthorVault
-            </code>
           </div>
 
           {errorMessage && (
@@ -126,17 +102,27 @@ export default function InkRoomGatePage() {
               <div className="relative">
                 <input
                   id="gate-key"
-                  type="text"
+                  type={showKey ? "text" : "password"}
                   required
                   autoFocus
                   disabled={status === "locked" || status === "submitting"}
                   value={accessKey}
                   onChange={(e) => setAccessKey(e.target.value)}
-                  placeholder="WildInk2026!AuthorVault"
-                  className="w-full px-4 py-3 rounded-xl bg-brand-cream text-brand-ink text-sm border border-brand-gold/50 focus:outline-none focus:ring-2 focus:ring-brand-coral pr-10 font-mono"
+                  placeholder="••••••••••••••••••••"
+                  className="w-full px-4 py-3 rounded-xl bg-brand-cream text-brand-ink text-sm border border-brand-gold/50 focus:outline-none focus:ring-2 focus:ring-brand-coral pr-11 font-mono"
                 />
-                <Lock className="w-4 h-4 text-brand-forest/40 absolute right-3.5 top-3.5" />
+                <button
+                  type="button"
+                  onClick={() => setShowKey(!showKey)}
+                  className="absolute right-3.5 top-3.5 text-brand-forest/50 hover:text-brand-forest transition-colors cursor-pointer"
+                  title={showKey ? "Hide key" : "Show key"}
+                >
+                  {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
+              <p className="text-[11px] font-sans text-brand-forest/60 mt-2">
+                Protected by rate-limiting (max 5 attempts) and slow cryptographic derivation.
+              </p>
             </div>
 
             <button
@@ -158,7 +144,7 @@ export default function InkRoomGatePage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-brand-gold/20 text-center">
+          <div className="mt-8 pt-6 border-t border-brand-gold/20 text-center">
             <Link
               href="/ink-room/login"
               className="text-xs font-sans text-brand-coral hover:text-brand-forest font-semibold transition-colors"

@@ -2,17 +2,20 @@
 
 import React, { useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
-import { ShieldCheck, UserCheck, AlertCircle, Loader2, KeyRound, ArrowRight, Copy, Check } from "lucide-react";
+import { UserCheck, AlertCircle, Loader2, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 
 export default function InkRoomLoginPage() {
-  const [email, setEmail] = useState("lindaemefadaniels@gmail.com");
-  const [accessKey, setAccessKey] = useState("WildInk2026!AuthorVault");
+  const [email, setEmail] = useState("");
+  const [accessKey, setAccessKey] = useState("");
+  const [showKey, setShowKey] = useState(false);
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [copiedKey, setCopiedKey] = useState(false);
 
-  const handleSignIn = async (userEmail: string, keyVal: string) => {
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !accessKey) return;
+
     setStatus("submitting");
     setErrorMessage("");
 
@@ -20,13 +23,13 @@ export default function InkRoomLoginPage() {
       const res = await fetch("/api/ink-room/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: userEmail, key: keyVal }),
+        body: JSON.stringify({ email: email.trim(), key: accessKey.trim() }),
       });
       const data = await res.json();
 
       if (!res.ok) {
         setStatus("error");
-        setErrorMessage(data.error || "Access denied. Account not authorized.");
+        setErrorMessage(data.error || "Access denied. Invalid credentials.");
         return;
       }
 
@@ -36,12 +39,6 @@ export default function InkRoomLoginPage() {
       setStatus("error");
       setErrorMessage("Network error during identity verification.");
     }
-  };
-
-  const copyKeyToClipboard = () => {
-    navigator.clipboard.writeText("WildInk2026!AuthorVault");
-    setCopiedKey(true);
-    setTimeout(() => setCopiedKey(false), 2000);
   };
 
   return (
@@ -65,12 +62,12 @@ export default function InkRoomLoginPage() {
         <div className="w-full max-w-md bg-brand-parchment text-brand-ink rounded-3xl p-8 sm:p-12 border-2 border-brand-gold/60 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-forest via-brand-gold to-brand-coral" />
 
-          <div className="text-center mb-6">
+          <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-2xl bg-brand-forest text-brand-gold-light mx-auto flex items-center justify-center mb-4 shadow-md">
               <UserCheck className="w-8 h-8 text-brand-coral" />
             </div>
             <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase text-brand-coral">
-              Author Publishing Vault
+              Private Author Vault
             </span>
             <h1 className="font-display text-3xl font-bold text-brand-forest mt-1 mb-2">
               The Ink Room Sign In
@@ -80,30 +77,6 @@ export default function InkRoomLoginPage() {
             </p>
           </div>
 
-          {/* Quick Credential Box */}
-          <div className="mb-6 p-4 rounded-2xl bg-brand-cream border border-brand-gold/40 text-xs font-sans">
-            <div className="flex items-center justify-between font-bold text-brand-forest uppercase tracking-wider text-[11px] mb-1.5">
-              <span className="flex items-center gap-1.5">
-                <KeyRound className="w-3.5 h-3.5 text-brand-coral" />
-                Master Vault Key:
-              </span>
-              <button
-                type="button"
-                onClick={copyKeyToClipboard}
-                className="text-[10px] text-brand-coral hover:text-brand-forest transition-colors flex items-center gap-1 font-mono font-normal"
-              >
-                {copiedKey ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                {copiedKey ? "Copied" : "Copy Key"}
-              </button>
-            </div>
-            <code className="block bg-brand-parchment px-2.5 py-1.5 rounded-lg border border-brand-gold/30 font-mono text-[11px] text-brand-forest font-semibold mb-2 select-all">
-              WildInk2026!AuthorVault
-            </code>
-            <div className="text-[11px] text-brand-forest/70">
-              <strong className="text-brand-forest">Owner Email:</strong> lindaemefadaniels@gmail.com
-            </div>
-          </div>
-
           {errorMessage && (
             <div className="mb-6 p-4 rounded-xl bg-brand-coral/15 border border-brand-coral/40 text-brand-forest text-xs flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 text-brand-coral shrink-0 mt-0.5" />
@@ -111,13 +84,7 @@ export default function InkRoomLoginPage() {
             </div>
           )}
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSignIn(email, accessKey);
-            }}
-            className="space-y-4"
-          >
+          <form onSubmit={handleSignIn} className="space-y-4">
             <div>
               <label
                 htmlFor="author-email"
@@ -129,9 +96,11 @@ export default function InkRoomLoginPage() {
                 id="author-email"
                 type="email"
                 required
+                autoFocus
+                disabled={status === "submitting"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="lindaemefadaniels@gmail.com"
+                placeholder="your-author-email@domain.com"
                 className="w-full px-4 py-3 rounded-xl bg-brand-cream text-brand-ink text-sm border border-brand-gold/50 focus:outline-none focus:ring-2 focus:ring-brand-coral font-sans"
               />
             </div>
@@ -141,17 +110,31 @@ export default function InkRoomLoginPage() {
                 htmlFor="author-key"
                 className="block text-xs font-sans font-semibold uppercase tracking-wider text-brand-forest mb-1.5"
               >
-                Access Key
+                Vault Access Key
               </label>
-              <input
-                id="author-key"
-                type="text"
-                required
-                value={accessKey}
-                onChange={(e) => setAccessKey(e.target.value)}
-                placeholder="WildInk2026!AuthorVault"
-                className="w-full px-4 py-3 rounded-xl bg-brand-cream text-brand-ink text-sm border border-brand-gold/50 focus:outline-none focus:ring-2 focus:ring-brand-coral font-mono"
-              />
+              <div className="relative">
+                <input
+                  id="author-key"
+                  type={showKey ? "text" : "password"}
+                  required
+                  disabled={status === "submitting"}
+                  value={accessKey}
+                  onChange={(e) => setAccessKey(e.target.value)}
+                  placeholder="••••••••••••••••••••"
+                  className="w-full px-4 py-3 rounded-xl bg-brand-cream text-brand-ink text-sm border border-brand-gold/50 focus:outline-none focus:ring-2 focus:ring-brand-coral font-mono pr-11"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowKey(!showKey)}
+                  className="absolute right-3.5 top-3.5 text-brand-forest/50 hover:text-brand-forest transition-colors cursor-pointer"
+                  title={showKey ? "Hide key" : "Show key"}
+                >
+                  {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <p className="text-[11px] font-sans text-brand-forest/60 mt-2">
+                Protected by rate-limiting (max 5 attempts) and cryptographic PBKDF2 derivation.
+              </p>
             </div>
 
             <button
@@ -166,27 +149,15 @@ export default function InkRoomLoginPage() {
                 </>
               ) : (
                 <>
-                  <span>Sign In as Author</span>
+                  <span>Enter The Ink Room</span>
                   <ArrowRight className="w-4 h-4 text-brand-gold-light" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Quick-Access 1-Click Fast Lane for Linda */}
-          <div className="mt-6 pt-5 border-t border-brand-gold/25">
-            <span className="block text-[11px] font-sans font-semibold text-brand-forest/70 uppercase tracking-wider mb-2 text-center">
-              1-Click Owner Fast Sign-In
-            </span>
-            <button
-              type="button"
-              disabled={status === "submitting"}
-              onClick={() => handleSignIn("lindaemefadaniels@gmail.com", "WildInk2026!AuthorVault")}
-              className="w-full py-2.5 rounded-xl border border-brand-gold/60 bg-brand-cream hover:bg-brand-forest hover:text-brand-cream text-brand-forest text-xs font-sans font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-            >
-              <ShieldCheck className="w-4 h-4 text-brand-coral" />
-              <span>Linda Emefa Daniels (Owner Role)</span>
-            </button>
+          <div className="mt-8 pt-6 border-t border-brand-gold/20 text-center text-[11px] font-sans text-brand-forest/60">
+            For Linda Emefa Daniels and authorized literary contributors only.
           </div>
         </div>
       </main>

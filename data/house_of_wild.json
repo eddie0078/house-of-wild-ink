@@ -5191,9 +5191,9 @@
       "metric_date": "2026-11-06",
       "path": "/poems/stones",
       "content_type": "poem",
-      "page_views": 1,
-      "engaged_reads": 1,
-      "share_events": 1
+      "page_views": 2,
+      "engaged_reads": 2,
+      "share_events": 2
     }
   ],
   "subscribers": [],
@@ -5202,6 +5202,14 @@
     {
       "id": "user-owner-linda",
       "email": "lindaemefadaniels@gmail.com",
+      "name": "Linda Emefa Daniels",
+      "role": "Owner",
+      "is_active": true,
+      "created_at": "2026-11-04T19:57:26.497Z"
+    },
+    {
+      "id": "user-owner-linda-domain",
+      "email": "linda@houseofwildink.com",
       "name": "Linda Emefa Daniels",
       "role": "Owner",
       "is_active": true,
@@ -5253,6 +5261,12 @@
       "email": "lindaemefadaniels@gmail.com",
       "role": "Owner",
       "expiresAt": 1793992472633
+    },
+    {
+      "token": "9960374f630c061d812a1ddd489298995d368136c1596443754d2bb409f5f89b",
+      "email": "lindaemefadaniels@gmail.com",
+      "role": "Owner",
+      "expiresAt": 1794044611542
     }
   ]
 }

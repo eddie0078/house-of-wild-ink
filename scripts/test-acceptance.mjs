@@ -108,6 +108,11 @@ db.logPageView("/ink-room/poems", "admin");
 const afterAdminLog = db.getAnalyticsSummary();
 const adminLeak = afterAdminLog.topPages.find(p => p.path.startsWith("/ink-room"));
 assert.strictEqual(adminLeak, undefined, "Private /ink-room routes must NEVER be logged in public analytics");
+
+// Clean up TEST 6 test analytics
+db.data.analytics = [];
+db.persist();
+
 console.log("✓ TEST 6 PASSED: First-party analytics excludes private routes and tallies aggregate metrics.\n");
 
 // TEST 7: Newsletter & Contact Storage
@@ -320,9 +325,10 @@ assert.ok(summaryAll.totalViews >= summaryToday.totalViews, "All-time views must
 assert.ok(summaryAll.topPages.length > 0, "Top pages list must be populated");
 assert.ok(summaryAll.topPages.some(p => p.title && p.title.length > 0), "Top pages must include resolved literary titles");
 
-// Clean up test search queries and interaction logs
-db.data.search_queries = db.data.search_queries.filter(q => q.query !== "unwritten dream" && q.query !== "volta");
-db.data.interaction_events = db.data.interaction_events.filter(e => e.label !== "The First Garden" && e.label !== "Scarlet Crimson");
+// Clean up test search queries, interaction logs, and analytics
+db.data.analytics = [];
+db.data.search_queries = [];
+db.data.interaction_events = [];
 db.persist();
 
 console.log("✓ TEST 16 PASSED: Real-time telemetry, search intelligence, dwell tracking & time ranges verified.\n");

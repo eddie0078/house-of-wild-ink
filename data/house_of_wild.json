@@ -5105,7 +5105,7 @@
       "sort_order": 1,
       "status": "published",
       "created_at": "2026-11-04T19:57:26.496Z",
-      "updated_at": "2026-11-16T14:44:52.386Z",
+      "updated_at": "2026-11-16T17:36:29.236Z",
       "portrait_media_id": "media-linda-portrait",
       "awards": [
         {
@@ -5170,87 +5170,7 @@
       "created_at": "2026-11-06T19:01:42.412Z"
     }
   ],
-  "analytics": [
-    {
-      "id": "stat-init-1",
-      "metric_date": "2026-11-04",
-      "path": "/poems/stones",
-      "content_type": "poem",
-      "page_views": 49,
-      "engaged_reads": 41,
-      "share_events": 12
-    },
-    {
-      "id": "640d8aa5-bba9-4edb-89cb-7840b1c8ab1c",
-      "metric_date": "2026-11-04",
-      "path": "/",
-      "content_type": "page",
-      "page_views": 26,
-      "engaged_reads": 10,
-      "share_events": 0
-    },
-    {
-      "id": "c59af89d-c18a-4450-9795-b44645476256",
-      "metric_date": "2026-11-04",
-      "path": "/about",
-      "content_type": "page",
-      "page_views": 8,
-      "engaged_reads": 3,
-      "share_events": 0
-    },
-    {
-      "id": "a0b2bdb2-4028-497c-8f4b-8c7aa5267343",
-      "metric_date": "2026-11-05",
-      "path": "/",
-      "content_type": "page",
-      "page_views": 21,
-      "engaged_reads": 9,
-      "share_events": 0
-    },
-    {
-      "id": "39998e40-dbc2-4e6c-90e0-2feef3fa6b4b",
-      "metric_date": "2026-11-05",
-      "path": "/poems/stones",
-      "content_type": "poem",
-      "page_views": 4,
-      "engaged_reads": 3,
-      "share_events": 2
-    },
-    {
-      "id": "a60fd8ca-86b7-47e4-9520-41df2dd2c330",
-      "metric_date": "2026-11-06",
-      "path": "/poems/stones",
-      "content_type": "poem",
-      "page_views": 9,
-      "engaged_reads": 9,
-      "share_events": 9
-    },
-    {
-      "id": "7cdc739e-ef45-4bcc-9bf2-7c2bfd82b640",
-      "metric_date": "2026-11-16",
-      "path": "/poems/stones",
-      "content_type": "poem",
-      "page_views": 2,
-      "engaged_reads": 3,
-      "completion_reads": 2,
-      "dwell_time_seconds_total": 85,
-      "share_events": 2,
-      "quote_copies": 2,
-      "audio_plays": 0,
-      "audio_completions": 0,
-      "devices": {
-        "mobile": 2,
-        "desktop": 0,
-        "tablet": 0
-      },
-      "referrers": {
-        "direct": 0,
-        "search": 2,
-        "social": 0,
-        "internal": 0
-      }
-    }
-  ],
+  "analytics": [],
   "subscribers": [],
   "messages": [],
   "users": [

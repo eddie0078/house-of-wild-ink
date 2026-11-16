@@ -1,52 +1,142 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Navigation } from "./Navigation";
 import { Footer } from "./Footer";
 import { AudioProvider } from "@/lib/AudioContext";
 import { FloatingAudioPlayer } from "./FloatingAudioPlayer";
 
+function resolveContentType(path: string): string {
+  if (path.startsWith("/poems/")) return "poem";
+  if (path.startsWith("/stories/")) return "story";
+  if (path.startsWith("/essays/")) return "essay";
+  if (path.startsWith("/audio-stories/")) return "audio_story";
+  if (path.startsWith("/collections/")) return "collection";
+  return "page";
+}
+
 export function PublicShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const startTimeRef = useRef<number>(Date.now());
+  const activeSecondsRef = useRef<number>(0);
+  const scrollReportedRef = useRef<boolean>(false);
 
   useEffect(() => {
     // Respect Do Not Track / Global Privacy Control
-    if (typeof window !== "undefined") {
-      const dnt = navigator.doNotTrack === "1" || (window as any).doNotTrack === "1";
-      const gpc = (navigator as any).globalPrivacyControl === true;
-      if (dnt || gpc) return;
+    if (typeof window === "undefined") return;
+    const dnt = navigator.doNotTrack === "1" || (window as any).doNotTrack === "1";
+    const gpc = (navigator as any).globalPrivacyControl === true;
+    if (dnt || gpc) return;
 
-      // Log privacy-conscious aggregate page view
+    const contentType = resolveContentType(pathname);
+    startTimeRef.current = Date.now();
+    activeSecondsRef.current = 0;
+    scrollReportedRef.current = false;
+
+    // 1. Initial aggregate page view
+    fetch("/api/analytics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        path: pathname,
+        contentType,
+        eventType: "pageview",
+      }),
+    }).catch(() => {});
+
+    // 2. Engaged read milestone (30 seconds of active dwell)
+    const engagedTimer = setTimeout(() => {
       fetch("/api/analytics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           path: pathname,
-          contentType: pathname.startsWith("/poems")
-            ? "poem"
-            : pathname.startsWith("/stories")
-            ? "story"
-            : "page",
-          engaged: false,
+          contentType,
+          eventType: "engaged_read",
         }),
       }).catch(() => {});
+    }, 30000);
 
-      // Engaged read tracker: triggers after 30 seconds of active reading
-      const timer = setTimeout(() => {
+    // 3. Scroll depth tracker: 75% read completion milestone
+    const handleScroll = () => {
+      if (scrollReportedRef.current) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight > 0 && scrollTop / scrollHeight >= 0.75) {
+        scrollReportedRef.current = true;
         fetch("/api/analytics", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             path: pathname,
-            contentType: "engaged_read",
-            engaged: true,
+            contentType,
+            eventType: "scroll_complete",
           }),
         }).catch(() => {});
-      }, 30000);
+      }
+    };
 
-      return () => clearTimeout(timer);
-    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // 4. Quote / Verse Copy Listener
+    const handleCopy = () => {
+      const selection = window.getSelection()?.toString();
+      if (selection && selection.trim().length > 10) {
+        fetch("/api/analytics", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            path: pathname,
+            contentType,
+            eventType: "quote_copy",
+          }),
+        }).catch(() => {});
+      }
+    };
+
+    document.addEventListener("copy", handleCopy);
+
+    // 5. Active dwell timer accumulation (pauses when reader minimizes tab)
+    let lastTick = Date.now();
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        const now = Date.now();
+        activeSecondsRef.current += Math.round((now - lastTick) / 1000);
+        lastTick = now;
+      } else {
+        lastTick = Date.now();
+      }
+    }, 2000);
+
+    // Cleanup and Dwell Beacon
+    return () => {
+      clearTimeout(engagedTimer);
+      clearInterval(interval);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("copy", handleCopy);
+
+      const totalDwell = activeSecondsRef.current;
+      if (totalDwell >= 3) {
+        const payload = JSON.stringify({
+          path: pathname,
+          contentType,
+          eventType: "dwell_time",
+          dwellSeconds: totalDwell,
+        });
+
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon("/api/analytics", new Blob([payload], { type: "application/json" }));
+        } else {
+          fetch("/api/analytics", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+            keepalive: true,
+          }).catch(() => {});
+        }
+      }
+    };
   }, [pathname]);
 
   return (

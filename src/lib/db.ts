@@ -8,6 +8,9 @@ import {
   MediaAsset,
   Revision,
   DailyAnalytics,
+  SearchQueryLog,
+  InteractionEventLog,
+  AnalyticsSummary,
   NewsletterSubscriber,
   ContactMessage,
   SiteSettings,
@@ -22,6 +25,8 @@ interface DatabaseSchema {
   media: MediaAsset[];
   revisions: Revision[];
   analytics: DailyAnalytics[];
+  search_queries: SearchQueryLog[];
+  interaction_events: InteractionEventLog[];
   subscribers: NewsletterSubscriber[];
   messages: ContactMessage[];
   users: UserAccount[];
@@ -213,6 +218,8 @@ Listen for the echo.`,
         share_events: 8,
       },
     ],
+    search_queries: [],
+    interaction_events: [],
     subscribers: [],
     messages: [],
     users: initialUsers,
@@ -248,6 +255,14 @@ class Database {
 
   private ensureDefaults(data: DatabaseSchema): DatabaseSchema {
     let changed = false;
+    if (!data.search_queries) {
+      data.search_queries = [];
+      changed = true;
+    }
+    if (!data.interaction_events) {
+      data.interaction_events = [];
+      changed = true;
+    }
     if (!data.media) data.media = [];
     if (!data.media.some((m) => m.id === "media-linda-portrait")) {
       data.media.push({
@@ -877,8 +892,17 @@ class Database {
   }
 
   // --- First-Party Privacy-Conscious Analytics ---
-  logPageView(path: string, contentType: string, engaged = false, shared = false): void {
-    if (path.startsWith("/ink-room") || path.startsWith("/api")) return; // Strictly exclude private routes
+  logTelemetryEvent(params: {
+    path: string;
+    contentType?: string;
+    eventType?: "pageview" | "engaged_read" | "scroll_complete" | "dwell_time" | "share" | "quote_copy" | "audio_play" | "audio_complete";
+    dwellSeconds?: number;
+    device?: "mobile" | "desktop" | "tablet";
+    referrer?: "direct" | "search" | "social" | "internal";
+  }): void {
+    const { path, contentType = "page", eventType = "pageview", dwellSeconds = 0, device, referrer } = params;
+    if (!path || path.startsWith("/ink-room") || path.startsWith("/api")) return; // Strictly exclude private routes
+
     const today = new Date().toISOString().split("T")[0];
     let entry = this.data.analytics.find((a) => a.metric_date === today && a.path === path);
 
@@ -890,43 +914,285 @@ class Database {
         content_type: contentType,
         page_views: 0,
         engaged_reads: 0,
+        completion_reads: 0,
+        dwell_time_seconds_total: 0,
         share_events: 0,
+        quote_copies: 0,
+        audio_plays: 0,
+        audio_completions: 0,
+        devices: { mobile: 0, desktop: 0, tablet: 0 },
+        referrers: { direct: 0, search: 0, social: 0, internal: 0 },
       };
       this.data.analytics.push(entry);
     }
 
-    entry.page_views += 1;
-    if (engaged) entry.engaged_reads += 1;
-    if (shared) entry.share_events += 1;
+    if (entry.completion_reads === undefined) entry.completion_reads = 0;
+    if (entry.dwell_time_seconds_total === undefined) entry.dwell_time_seconds_total = 0;
+    if (entry.quote_copies === undefined) entry.quote_copies = 0;
+    if (entry.audio_plays === undefined) entry.audio_plays = 0;
+    if (entry.audio_completions === undefined) entry.audio_completions = 0;
+    if (!entry.devices) entry.devices = { mobile: 0, desktop: 0, tablet: 0 };
+    if (!entry.referrers) entry.referrers = { direct: 0, search: 0, social: 0, internal: 0 };
+
+    switch (eventType) {
+      case "pageview":
+        entry.page_views += 1;
+        break;
+      case "engaged_read":
+        entry.engaged_reads += 1;
+        break;
+      case "scroll_complete":
+        entry.completion_reads += 1;
+        break;
+      case "dwell_time":
+        break;
+      case "share":
+        entry.share_events += 1;
+        break;
+      case "quote_copy":
+        entry.quote_copies += 1;
+        break;
+      case "audio_play":
+        entry.audio_plays += 1;
+        break;
+      case "audio_complete":
+        entry.audio_completions += 1;
+        break;
+    }
+
+    if (dwellSeconds > 0) {
+      entry.dwell_time_seconds_total += Math.min(dwellSeconds, 3600);
+    }
+
+    if (device && entry.devices[device] !== undefined) {
+      entry.devices[device] += 1;
+    }
+    if (referrer && entry.referrers[referrer] !== undefined) {
+      entry.referrers[referrer] += 1;
+    }
+
     this.persist();
   }
 
-  getAnalyticsSummary() {
-    const totalViews = this.data.analytics.reduce((acc, curr) => acc + curr.page_views, 0);
-    const totalEngaged = this.data.analytics.reduce((acc, curr) => acc + curr.engaged_reads, 0);
-    const totalShares = this.data.analytics.reduce((acc, curr) => acc + curr.share_events, 0);
+  logPageView(path: string, contentType: string, engaged = false, shared = false): void {
+    this.logTelemetryEvent({ path, contentType, eventType: "pageview" });
+    if (engaged) {
+      this.logTelemetryEvent({ path, contentType, eventType: "engaged_read" });
+    }
+    if (shared) {
+      this.logTelemetryEvent({ path, contentType, eventType: "share" });
+    }
+  }
 
-    // Group by path
-    const pageMap = new Map<string, { views: number; engaged: number; shares: number; type: string }>();
-    for (const a of this.data.analytics) {
-      const prev = pageMap.get(a.path) || { views: 0, engaged: 0, shares: 0, type: a.content_type };
-      prev.views += a.page_views;
-      prev.engaged += a.engaged_reads;
-      prev.shares += a.share_events;
+  logSearchQuery(query: string, resultCount: number): void {
+    if (!query || typeof query !== "string") return;
+    const clean = query.trim().slice(0, 100);
+    if (!clean) return;
+
+    if (!this.data.search_queries) this.data.search_queries = [];
+    this.data.search_queries.unshift({
+      id: crypto.randomUUID(),
+      query: clean,
+      result_count: resultCount,
+      created_at: new Date().toISOString(),
+    });
+
+    if (this.data.search_queries.length > 1000) {
+      this.data.search_queries = this.data.search_queries.slice(0, 1000);
+    }
+    this.persist();
+  }
+
+  logInteraction(
+    eventType: "audio_play" | "audio_complete" | "theme_switch" | "character_spotlight" | "newsletter_signup" | "quote_copy",
+    path: string,
+    label?: string
+  ): void {
+    if (!this.data.interaction_events) this.data.interaction_events = [];
+    this.data.interaction_events.unshift({
+      id: crypto.randomUUID(),
+      event_type: eventType,
+      path,
+      label: label?.slice(0, 100),
+      created_at: new Date().toISOString(),
+    });
+
+    if (this.data.interaction_events.length > 2000) {
+      this.data.interaction_events = this.data.interaction_events.slice(0, 2000);
+    }
+    this.persist();
+  }
+
+  getAnalyticsSummary(range: "today" | "7d" | "30d" | "all" = "all"): AnalyticsSummary {
+    const todayStr = new Date().toISOString().split("T")[0];
+    const nowMs = Date.now();
+    const cutoff7 = new Date(nowMs - 7 * 86400000).toISOString().split("T")[0];
+    const cutoff30 = new Date(nowMs - 30 * 86400000).toISOString().split("T")[0];
+
+    const isMatch = (metricDate: string) => {
+      if (range === "today") return metricDate === todayStr;
+      if (range === "7d") return metricDate >= cutoff7;
+      if (range === "30d") return metricDate >= cutoff30;
+      return true;
+    };
+
+    const isMatchTimestamp = (isoTimestamp: string) => {
+      const datePart = isoTimestamp ? isoTimestamp.split("T")[0] : todayStr;
+      return isMatch(datePart);
+    };
+
+    // Filtered slices
+    const records = (this.data.analytics || []).filter((a) => isMatch(a.metric_date));
+    const searchLogs = (this.data.search_queries || []).filter((s) => isMatchTimestamp(s.created_at));
+    const eventLogs = (this.data.interaction_events || []).filter((e) => isMatchTimestamp(e.created_at));
+
+    const totalViews = records.reduce((acc, curr) => acc + (curr.page_views || 0), 0);
+    const totalEngaged = records.reduce((acc, curr) => acc + (curr.engaged_reads || 0), 0);
+    const totalCompletions = records.reduce((acc, curr) => acc + (curr.completion_reads || 0), 0);
+    const totalDwellSeconds = records.reduce((acc, curr) => acc + (curr.dwell_time_seconds_total || 0), 0);
+    const totalShares = records.reduce((acc, curr) => acc + (curr.share_events || 0), 0);
+    const totalQuoteCopies = records.reduce((acc, curr) => acc + (curr.quote_copies || 0), 0);
+    const totalAudioPlays = records.reduce((acc, curr) => acc + (curr.audio_plays || 0), 0) +
+      eventLogs.filter((e) => e.event_type === "audio_play").length;
+
+    // Group by path for top pages
+    const pageMap = new Map<
+      string,
+      { views: number; engaged: number; completions: number; shares: number; quoteCopies: number; type: string }
+    >();
+
+    for (const a of records) {
+      const prev = pageMap.get(a.path) || {
+        views: 0,
+        engaged: 0,
+        completions: 0,
+        shares: 0,
+        quoteCopies: 0,
+        type: a.content_type,
+      };
+      prev.views += a.page_views || 0;
+      prev.engaged += a.engaged_reads || 0;
+      prev.completions += a.completion_reads || 0;
+      prev.shares += a.share_events || 0;
+      prev.quoteCopies += a.quote_copies || 0;
       pageMap.set(a.path, prev);
     }
 
     const topPages = Array.from(pageMap.entries())
-      .map(([path, stats]) => ({ path, ...stats }))
+      .map(([path, stats]) => {
+        // Resolve friendly literary title
+        let title: string | undefined;
+        if (path === "/") title = "House of Wild Ink Villa Homepage";
+        else if (path === "/about") title = "About Linda Emefa Daniels";
+        else if (path === "/contact") title = "Literary Representation & Contact Desk";
+        else if (path === "/newsletter") title = "The Wild Ink Letterpress Circle";
+        else if (path === "/poems") title = "Poetry Treasury";
+        else if (path === "/stories") title = "Stories & Dramatic Works";
+        else if (path === "/essays") title = "Critical Essays & Reflections";
+        else if (path === "/audio-stories") title = "Spoken Word & Audio Stories";
+        else if (path === "/collections") title = "Curated Volumes Archive";
+        else {
+          const slug = path.split("/").filter(Boolean).pop();
+          if (slug) {
+            const item = this.data.content.find((c) => c.slug === slug);
+            if (item) title = item.title;
+            else {
+              const coll = this.data.collections.find((c) => c.slug === slug);
+              if (coll) title = coll.title;
+            }
+          }
+        }
+        return { path, ...stats, title };
+      })
       .sort((a, b) => b.views - a.views);
 
+    // Audio metrics breakdown
+    const audioPiecesMap = new Map<string, { plays: number; completions: number }>();
+    for (const a of records) {
+      if (a.path.startsWith("/audio-stories") || (a.audio_plays && a.audio_plays > 0)) {
+        const prev = audioPiecesMap.get(a.path) || { plays: 0, completions: 0 };
+        prev.plays += a.audio_plays || 0;
+        prev.completions += a.audio_completions || 0;
+        audioPiecesMap.set(a.path, prev);
+      }
+    }
+    const audioPieces = Array.from(audioPiecesMap.entries()).map(([path, stats]) => ({
+      path,
+      ...stats,
+    }));
+
+    // Search metrics breakdown
+    const queryCounts = new Map<string, { count: number; resultCount: number }>();
+    for (const s of searchLogs) {
+      const q = s.query.toLowerCase().trim();
+      const prev = queryCounts.get(q) || { count: 0, resultCount: s.result_count };
+      prev.count += 1;
+      queryCounts.set(q, prev);
+    }
+    const topQueries = Array.from(queryCounts.entries())
+      .map(([query, data]) => ({ query, count: data.count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    const zeroResultQueries = Array.from(queryCounts.entries())
+      .filter(([, data]) => data.resultCount === 0)
+      .map(([query, data]) => ({ query, count: data.count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    // Reader Preferences & Aesthetic
+    const themes: Record<string, number> = {};
+    for (const e of eventLogs) {
+      if (e.event_type === "theme_switch" && e.label) {
+        themes[e.label] = (themes[e.label] || 0) + 1;
+      }
+    }
+
+    const devices = { mobile: 0, desktop: 0, tablet: 0 };
+    const referrers = { direct: 0, search: 0, social: 0, internal: 0 };
+    for (const a of records) {
+      if (a.devices) {
+        devices.mobile += a.devices.mobile || 0;
+        devices.desktop += a.devices.desktop || 0;
+        devices.tablet += a.devices.tablet || 0;
+      }
+      if (a.referrers) {
+        referrers.direct += a.referrers.direct || 0;
+        referrers.search += a.referrers.search || 0;
+        referrers.social += a.referrers.social || 0;
+        referrers.internal += a.referrers.internal || 0;
+      }
+    }
+
     return {
+      range,
       totalViews,
       totalEngaged,
-      totalShares,
+      totalCompletions,
+      totalDwellSeconds,
+      averageDwellSeconds: totalViews > 0 ? Math.round(totalDwellSeconds / totalViews) : 0,
       engagementRate: totalViews > 0 ? Math.round((totalEngaged / totalViews) * 100) : 0,
+      completionRate: totalEngaged > 0 ? Math.round((totalCompletions / totalEngaged) * 100) : 0,
+      totalShares,
+      totalQuoteCopies,
+      totalAudioPlays,
       topPages,
-      dailyBreakdown: [...this.data.analytics],
+      audioMetrics: {
+        totalPlays: totalAudioPlays,
+        totalCompletions: records.reduce((acc, curr) => acc + (curr.audio_completions || 0), 0),
+        pieces: audioPieces,
+      },
+      searchMetrics: {
+        totalSearches: searchLogs.length,
+        topQueries,
+        zeroResultQueries,
+      },
+      readerPreferences: {
+        themes,
+        devices,
+        referrers,
+      },
+      dailyBreakdown: [...records],
     };
   }
 }

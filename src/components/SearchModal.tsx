@@ -102,12 +102,24 @@ export function SearchModal({
       fetch(`/api/search?q=${encodeURIComponent(query)}&type=${selectedType}`)
         .then((res) => res.json())
         .then((data) => {
-          setResults(data.results || []);
+          const items = data.results || [];
+          setResults(items);
           setSelectedIndex(0);
           setIsLoading(false);
+
+          if (query.trim().length >= 2) {
+            fetch("/api/analytics", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                query: query.trim(),
+                resultCount: items.length,
+              }),
+            }).catch(() => {});
+          }
         })
         .catch(() => setIsLoading(false));
-    }, 150);
+    }, 250);
 
     return () => clearTimeout(timer);
   }, [query, selectedType, isOpen]);

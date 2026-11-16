@@ -5105,7 +5105,7 @@
       "sort_order": 1,
       "status": "published",
       "created_at": "2026-11-04T19:57:26.496Z",
-      "updated_at": "2026-11-06T19:02:09.139Z",
+      "updated_at": "2026-11-16T14:44:52.386Z",
       "portrait_media_id": "media-linda-portrait",
       "awards": [
         {
@@ -5224,6 +5224,31 @@
       "page_views": 9,
       "engaged_reads": 9,
       "share_events": 9
+    },
+    {
+      "id": "7cdc739e-ef45-4bcc-9bf2-7c2bfd82b640",
+      "metric_date": "2026-11-16",
+      "path": "/poems/stones",
+      "content_type": "poem",
+      "page_views": 2,
+      "engaged_reads": 3,
+      "completion_reads": 2,
+      "dwell_time_seconds_total": 85,
+      "share_events": 2,
+      "quote_copies": 2,
+      "audio_plays": 0,
+      "audio_completions": 0,
+      "devices": {
+        "mobile": 2,
+        "desktop": 0,
+        "tablet": 0
+      },
+      "referrers": {
+        "direct": 0,
+        "search": 2,
+        "social": 0,
+        "internal": 0
+      }
     }
   ],
   "subscribers": [],
@@ -5309,6 +5334,14 @@
       "email": "lindaemefadaniels@gmail.com",
       "role": "Owner",
       "expiresAt": 1794077859865
+    },
+    {
+      "token": "eyJlbWFpbCI6ImxpbmRhZW1lZmFkYW5pZWxzQGdtYWlsLmNvbSIsInJvbGUiOiJPd25lciIsImV4cGlyZXNBdCI6MTc5NDkyNzI4Nzc0M30.wv7LVnwP918DgX5bg9HITsEMeO8gMZW__4SnsviKZ3A",
+      "email": "lindaemefadaniels@gmail.com",
+      "role": "Owner",
+      "expiresAt": 1794927287743
     }
-  ]
+  ],
+  "search_queries": [],
+  "interaction_events": []
 }

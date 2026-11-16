@@ -274,6 +274,59 @@ db.persist();
 
 console.log("✓ TEST 15 PASSED: Deletion removes records, scrubs cross-references, and preserves vault revisions.\n");
 
+// TEST 16: First-Party Telemetry & Analytics Time-Range Aggregations
+console.log("TEST 16: Testing First-Party Telemetry, Search Intent, Dwell Time & Range Aggregations...");
+
+// 1. Private route drop verification
+const analyticsCountBefore = db.data.analytics.length;
+db.logTelemetryEvent({ path: "/ink-room/security", eventType: "pageview" });
+assert.strictEqual(db.data.analytics.length, analyticsCountBefore, "Private /ink-room paths must NEVER be logged in telemetry");
+
+// 2. Telemetry event recording
+db.logTelemetryEvent({
+  path: "/poems/stones",
+  contentType: "poem",
+  eventType: "scroll_complete",
+  dwellSeconds: 85,
+  device: "mobile",
+  referrer: "search"
+});
+
+db.logTelemetryEvent({
+  path: "/poems/stones",
+  contentType: "poem",
+  eventType: "quote_copy"
+});
+
+db.logSearchQuery("volta", 3);
+db.logSearchQuery("unwritten dream", 0); // 0-result query test
+db.logInteraction("theme_switch", "/poems/stones", "Scarlet Crimson");
+db.logInteraction("audio_play", "/audio-stories/the-first-garden", "The First Garden");
+
+// 3. Time-range summary calculation
+const summaryToday = db.getAnalyticsSummary("today");
+assert.strictEqual(summaryToday.range, "today", "Summary range must reflect requested window");
+assert.ok(summaryToday.totalCompletions >= 1, "Completion reads must be tallied");
+assert.ok(summaryToday.totalQuoteCopies >= 1, "Quote copies must be tallied");
+assert.ok(summaryToday.totalDwellSeconds >= 85, "Dwell seconds must be recorded");
+assert.ok(summaryToday.readerPreferences.devices.mobile >= 1, "Device breakdown must capture mobile visit");
+assert.ok(summaryToday.readerPreferences.referrers.search >= 1, "Referrer breakdown must capture search referral");
+assert.ok(summaryToday.searchMetrics.totalSearches >= 2, "Search queries must be logged");
+assert.ok(summaryToday.searchMetrics.zeroResultQueries.some(q => q.query === "unwritten dream"), "Zero-result query must be flagged");
+assert.ok(summaryToday.readerPreferences.themes["Scarlet Crimson"] >= 1, "Theme switch must be recorded");
+
+const summaryAll = db.getAnalyticsSummary("all");
+assert.ok(summaryAll.totalViews >= summaryToday.totalViews, "All-time views must be >= today views");
+assert.ok(summaryAll.topPages.length > 0, "Top pages list must be populated");
+assert.ok(summaryAll.topPages.some(p => p.title && p.title.length > 0), "Top pages must include resolved literary titles");
+
+// Clean up test search queries and interaction logs
+db.data.search_queries = db.data.search_queries.filter(q => q.query !== "unwritten dream" && q.query !== "volta");
+db.data.interaction_events = db.data.interaction_events.filter(e => e.label !== "The First Garden" && e.label !== "Scarlet Crimson");
+db.persist();
+
+console.log("✓ TEST 16 PASSED: Real-time telemetry, search intelligence, dwell tracking & time ranges verified.\n");
+
 console.log("=================================================");
-console.log("ALL 15 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
+console.log("ALL 16 ACCEPTANCE CRITERIA SUITES PASSED (100%)");
 console.log("=================================================");

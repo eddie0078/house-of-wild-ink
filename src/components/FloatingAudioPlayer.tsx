@@ -37,6 +37,21 @@ export function FloatingAudioPlayer() {
     return () => clearInterval(interval);
   }, [isPlaying, playbackSpeed]);
 
+  // Log audio play telemetry once per track play session
+  useEffect(() => {
+    if (isPlaying && currentTrack) {
+      fetch("/api/analytics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          interaction: "audio_play",
+          path: `/audio-stories/${currentTrack.slug || currentTrack.id}`,
+          label: currentTrack.title,
+        }),
+      }).catch(() => {});
+    }
+  }, [isPlaying, currentTrack?.id]);
+
   if (!currentTrack) return null;
 
   const coverSrc = currentTrack.coverUrl || "/images/linda-emefa-daniels.jpg";

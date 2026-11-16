@@ -121,7 +121,78 @@ export interface DailyAnalytics {
   content_type: string;
   page_views: number;
   engaged_reads: number;
+  completion_reads?: number;
+  dwell_time_seconds_total?: number;
   share_events: number;
+  quote_copies?: number;
+  audio_plays?: number;
+  audio_completions?: number;
+  devices?: {
+    mobile: number;
+    desktop: number;
+    tablet: number;
+  };
+  referrers?: {
+    direct: number;
+    search: number;
+    social: number;
+    internal: number;
+  };
+}
+
+export interface SearchQueryLog {
+  id: string;
+  query: string;
+  result_count: number;
+  created_at: string;
+}
+
+export interface InteractionEventLog {
+  id: string;
+  event_type: "audio_play" | "audio_complete" | "theme_switch" | "character_spotlight" | "newsletter_signup" | "quote_copy";
+  path: string;
+  label?: string;
+  created_at: string;
+}
+
+export interface AnalyticsSummary {
+  range: "today" | "7d" | "30d" | "all";
+  totalViews: number;
+  totalEngaged: number;
+  totalCompletions: number;
+  totalDwellSeconds: number;
+  averageDwellSeconds: number;
+  engagementRate: number;
+  completionRate: number;
+  totalShares: number;
+  totalQuoteCopies: number;
+  totalAudioPlays: number;
+  topPages: Array<{
+    path: string;
+    views: number;
+    engaged: number;
+    completions: number;
+    shares: number;
+    quoteCopies: number;
+    type: string;
+    title?: string;
+  }>;
+  audioMetrics: {
+    totalPlays: number;
+    totalCompletions: number;
+    pieces: Array<{ path: string; plays: number; completions: number }>;
+  };
+  searchMetrics: {
+    totalSearches: number;
+    topQueries: Array<{ query: string; count: number }>;
+    zeroResultQueries: Array<{ query: string; count: number }>;
+  };
+  readerPreferences: {
+    themes: Record<string, number>;
+    devices: { mobile: number; desktop: number; tablet: number };
+    referrers: { direct: number; search: number; social: number; internal: number };
+  };
+  dailyBreakdown: DailyAnalytics[];
 }
 
 export interface NewsletterSubscriber {

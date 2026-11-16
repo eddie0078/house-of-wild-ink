@@ -49,6 +49,17 @@ export function BougainvilleaMoodSwitcher({
     } catch {
       // Ignore
     }
+
+    const moodName = MOODS.find((m) => m.id === mood)?.name || mood;
+    fetch("/api/analytics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        interaction: "theme_switch",
+        path: typeof window !== "undefined" ? window.location.pathname : "/",
+        label: moodName,
+      }),
+    }).catch(() => {});
   };
 
   return (

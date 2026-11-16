@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 export interface AudioTrack {
   id: string;
   title: string;
+  slug?: string;
   subtitle?: string;
   narrator?: string;
   duration?: string;

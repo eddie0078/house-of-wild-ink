@@ -4,8 +4,9 @@ import React, { useState, useMemo } from "react";
 import { ContentItem } from "@/lib/types";
 import { LetterpressReaderToolbar } from "./LetterpressReaderToolbar";
 import { BougainvilleaBractCluster, BougainvilleaDivider } from "./Bougainvillea";
-import { BookOpen, Users, Eye, EyeOff } from "lucide-react";
+import { BookOpen, Users, Eye, EyeOff, Bookmark, ListOrdered } from "lucide-react";
 import Link from "next/link";
+import { getPublicTypeLabel } from "@/lib/taxonomy";
 
 export function StoryReader({
   story,
@@ -38,6 +39,69 @@ export function StoryReader({
     return Array.from(names);
   }, [isShortDrama, story.structured_body]);
 
+  // Extract chapters / major sections for long prose works
+  const chapters = useMemo(() => {
+    if (isShortDrama || !story.raw_content) return [];
+    const lines = story.raw_content.split("\n");
+    const found: { id: string; title: string; level: number }[] = [];
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("## ")) {
+        const title = trimmed.replace(/^##\s*/, "").trim();
+        const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        found.push({ id, title, level: 2 });
+      } else if (trimmed.startsWith("### ")) {
+        const title = trimmed.replace(/^###\s*/, "").trim();
+        const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        found.push({ id, title, level: 3 });
+      }
+    });
+    return found;
+  }, [isShortDrama, story.raw_content]);
+
+  // Safe semantic renderer for formatted prose and chapters
+  const renderFormattedProse = (content: string) => {
+    const rawBlocks = content.split(/\n\s*\n/);
+    return rawBlocks.map((block, idx) => {
+      const trimmed = block.trim();
+      if (!trimmed) return null;
+
+      if (trimmed.startsWith("## ")) {
+        const title = trimmed.replace(/^##\s*/, "").trim();
+        const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        return (
+          <h2
+            key={idx}
+            id={id}
+            className="scroll-mt-24 font-display text-2xl sm:text-3xl font-bold text-brand-forest pt-8 pb-3 border-b border-brand-gold/25"
+          >
+            {title}
+          </h2>
+        );
+      }
+
+      if (trimmed.startsWith("### ")) {
+        const title = trimmed.replace(/^###\s*/, "").trim();
+        const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        return (
+          <h3
+            key={idx}
+            id={id}
+            className="scroll-mt-24 font-display text-xl sm:text-2xl font-semibold text-brand-coral pt-6 pb-2"
+          >
+            {title}
+          </h3>
+        );
+      }
+
+      return (
+        <p key={idx} className="leading-relaxed whitespace-pre-line mb-5">
+          {trimmed}
+        </p>
+      );
+    });
+  };
+
   const fontSizes = {
     sm: "text-base sm:text-lg leading-relaxed",
     base: "text-lg sm:text-xl leading-relaxed",
@@ -49,7 +113,7 @@ export function StoryReader({
     <article className={`tone-${tone} transition-colors duration-300 min-h-screen`}>
       <div className="max-w-3xl mx-auto px-6 py-12 sm:py-20">
         {/* Archival Print Broadside Header (Visible ONLY on print) */}
-        <div className="print-broadside-header">
+        <div className="print-broadside-header" aria-hidden="true">
           <div className="text-[10pt] uppercase tracking-widest text-[#C5A059] font-sans font-semibold">
             House of Wild Ink · {isShortDrama ? "Dramatic Broadside Script" : "Archival Edition"}
           </div>
@@ -71,6 +135,7 @@ export function StoryReader({
             authorCredit={story.author_credit}
             urlPath={`/stories/${story.slug}`}
             rawContent={story.raw_content}
+            contentType={story.content_type}
             onFontSizeChange={(size) => setFontSize(size)}
             onToneChange={(newTone) => setTone(newTone)}
             className="w-full max-w-xl"
@@ -81,7 +146,7 @@ export function StoryReader({
         <header className="mb-12 text-center pb-8 border-b border-brand-gold/20">
           <div className="inline-flex items-center gap-2 text-xs font-sans tracking-widest uppercase text-brand-coral font-semibold mb-3">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>{isShortDrama ? "Short Drama" : story.content_type}</span>
+            <span>{getPublicTypeLabel(story.content_type, story)}</span>
             {collectionTitle && (
               <>
                 <span className="text-brand-forest/40">·</span>
@@ -146,6 +211,7 @@ export function StoryReader({
                 <button
                   type="button"
                   onClick={() => setSelectedCharacter(null)}
+                  aria-pressed={selectedCharacter === null}
                   className={`px-3 py-1 rounded-full text-xs font-sans transition-all cursor-pointer ${
                     selectedCharacter === null
                       ? "bg-brand-forest text-brand-cream font-bold shadow-xs"
@@ -159,6 +225,7 @@ export function StoryReader({
                     key={name}
                     type="button"
                     onClick={() => setSelectedCharacter(name)}
+                    aria-pressed={selectedCharacter === name}
                     className={`px-3 py-1 rounded-full text-xs font-sans font-medium transition-all cursor-pointer ${
                       selectedCharacter === name
                         ? "bg-brand-coral text-white font-bold shadow-xs scale-105"
@@ -252,9 +319,37 @@ export function StoryReader({
             })()}
           </div>
         ) : (
-          /* LONG-FORM PROSE WITH DROP CAP AND EDITORIAL RHYTHM */
-          <div className={`prose-canvas font-reading ${fontSizes[fontSize]} text-brand-ink leading-relaxed whitespace-pre-line selection:bg-brand-gold/30 transition-colors`}>
-            {story.raw_content}
+          <div>
+            {/* Table of Contents for Multi-Chapter Long Works */}
+            {chapters.length > 2 && (
+              <nav
+                aria-label="Table of Contents"
+                className="mb-10 p-5 rounded-2xl bg-brand-cream/80 border border-brand-gold/30 no-print shadow-xs"
+              >
+                <div className="flex items-center gap-2 text-xs font-sans font-semibold tracking-wider uppercase text-brand-coral mb-3">
+                  <Bookmark className="w-4 h-4" />
+                  <span>Table of Contents · Chapters</span>
+                </div>
+                <ol className="space-y-2 text-sm font-reading">
+                  {chapters.map((ch) => (
+                    <li key={ch.id} className={ch.level === 3 ? "pl-5 text-xs italic" : "font-medium"}>
+                      <a
+                        href={`#${ch.id}`}
+                        className="text-brand-forest hover:text-brand-coral hover:underline transition-colors flex items-center gap-2"
+                      >
+                        <span className="text-brand-gold text-xs">❦</span>
+                        <span>{ch.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
+            {/* Semantic Long-Form Prose Renderer */}
+            <div className={`prose-canvas font-reading ${fontSizes[fontSize]} text-brand-ink leading-relaxed selection:bg-brand-gold/30 transition-colors`}>
+              {renderFormattedProse(story.raw_content)}
+            </div>
           </div>
         )}
 

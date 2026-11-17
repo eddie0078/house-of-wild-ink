@@ -19,6 +19,9 @@ export async function generateMetadata({ params }: PoemPageProps): Promise<Metad
   return {
     title: poem.seo_title || `${poem.title} — Poem`,
     description: poem.seo_description || poem.excerpt,
+    alternates: {
+      canonical: `/poems/${slug}`,
+    },
     openGraph: {
       title: poem.seo_title || `${poem.title} by ${poem.author_credit}`,
       description: poem.seo_description || poem.excerpt,

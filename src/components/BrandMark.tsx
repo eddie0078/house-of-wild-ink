@@ -99,23 +99,23 @@ export function Wordmark({
   const isLight = theme === "light";
 
   const titleSizes = {
-    sm: "text-base sm:text-lg",
-    md: "text-lg xl:text-xl",
+    sm: "text-sm sm:text-base",
+    md: "text-sm sm:text-base xl:text-xl",
     lg: "text-2xl sm:text-3xl",
     xl: "text-4xl sm:text-6xl",
   };
 
   const sigSizes = {
-    sm: "text-[9px]",
-    md: "text-[10px] xl:text-[11px]",
+    sm: "text-[8px] sm:text-[9px]",
+    md: "text-[8.5px] sm:text-[10px] xl:text-[11px]",
     lg: "text-xs",
     xl: "text-base sm:text-lg",
   };
 
   return (
-    <div className={`flex flex-col whitespace-nowrap shrink-0 ${className}`}>
+    <div className={`flex flex-col min-w-0 ${className}`}>
       <span
-        className={`font-display font-bold tracking-tight transition-colors leading-tight ${
+        className={`font-display font-bold tracking-tight transition-colors leading-tight truncate ${
           titleSizes[size]
         } ${isLight ? "text-brand-cream" : "text-brand-forest"}`}
       >
@@ -123,7 +123,7 @@ export function Wordmark({
       </span>
       {showSignature && (
         <span
-          className={`font-sans tracking-[0.16em] uppercase transition-colors leading-none mt-0.5 ${
+          className={`font-sans tracking-[0.14em] sm:tracking-[0.16em] uppercase transition-colors leading-none mt-0.5 truncate ${
             sigSizes[size]
           } ${isLight ? "text-brand-gold-light" : "text-brand-coral"}`}
         >

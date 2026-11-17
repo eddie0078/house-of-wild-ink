@@ -5,8 +5,11 @@ import { Mail, ShieldCheck, HeartHandshake } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Newsletter",
+  title: "The House Newsletter",
   description: "Letters from House of Wild Ink by Linda Emefa Daniels. Quiet, first-party literary mailings.",
+  alternates: {
+    canonical: "/newsletter",
+  },
 };
 
 export default function NewsletterPage() {

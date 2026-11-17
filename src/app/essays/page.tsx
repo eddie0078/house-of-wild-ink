@@ -5,13 +5,17 @@ import { db } from "@/lib/db";
 import { PublicShell } from "@/components/PublicShell";
 import { FloralDivider } from "@/components/FloralDivider";
 import { BookOpen, Clock, ArrowRight, Feather } from "lucide-react";
+import { getPublicTypeLabel, getActionLabel } from "@/lib/taxonomy";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Essays & Articles — House of Wild Ink",
-  description: "Critical commentary, long-form reflections, and essays by Linda Emefa Daniels.",
+  title: "Essays & Reflections",
+  description: "Critical commentary, long-form reflections, and essays by Linda Emefa Daniels (L.E. Daniels | DEFFA).",
+  alternates: {
+    canonical: "/essays",
+  },
 };
 
 export default function EssaysIndexPage() {
@@ -80,7 +84,7 @@ export default function EssaysIndexPage() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-xs text-[#64746E]">
                         <span className="font-semibold uppercase tracking-wider text-[10px] text-[#C85A46] bg-[#C85A46]/10 px-2 py-0.5 rounded-full">
-                          {essay.content_type.replace("_", " ")}
+                          {getPublicTypeLabel(essay.content_type, essay)}
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock className="w-3 h-3 text-[#C5A059]" />
@@ -113,7 +117,7 @@ export default function EssaysIndexPage() {
                         href={`/essays/${essay.slug}`}
                         className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#C85A46] group-hover:translate-x-1 transition-transform"
                       >
-                        <span>Read Essay</span>
+                        <span>{getActionLabel(essay.content_type)}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>

@@ -7,8 +7,11 @@ import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaCascading
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Collections",
-  description: "Curated literary collections grouping poems, stories, and short dramas by theme, season, and project.",
+  title: "Collections & Curated Volumes",
+  description: "Curated literary collections grouping poems, stories, and reflections by Linda Emefa Daniels (L.E. Daniels | DEFFA).",
+  alternates: {
+    canonical: "/collections",
+  },
 };
 
 export const dynamic = "force-dynamic";

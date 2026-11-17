@@ -15,11 +15,14 @@ export async function generateMetadata({ params }: EssayPageProps): Promise<Meta
   const { slug } = await params;
   const item = db.getContentBySlug(slug);
   if (!item || !["essay", "article", "reflection"].includes(item.content_type)) {
-    return { title: "Essay Not Found — House of Wild Ink" };
+    return { title: "Essay Not Found" };
   }
   return {
-    title: `${item.title} — Essay by ${item.author_credit}`,
+    title: `${item.title} — ${item.author_credit}`,
     description: item.seo_description || item.excerpt,
+    alternates: {
+      canonical: `/essays/${slug}`,
+    },
   };
 }
 

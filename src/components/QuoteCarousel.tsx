@@ -8,6 +8,13 @@ export function QuoteCarousel({ quotes }: { quotes: NotebookQuote[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
 
+  // Respect user's reduced motion preference
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIsPlaying(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isPlaying || quotes.length <= 1) return;
     const interval = setInterval(() => {

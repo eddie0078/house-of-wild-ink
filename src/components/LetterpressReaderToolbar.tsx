@@ -18,6 +18,7 @@ interface LetterpressProps {
   authorCredit: string;
   urlPath: string;
   rawContent: string;
+  contentType?: string;
   onFontSizeChange?: (size: "sm" | "base" | "lg" | "xl") => void;
   onToneChange?: (tone: "parchment" | "sepia" | "night") => void;
   className?: string;
@@ -28,6 +29,7 @@ export function LetterpressReaderToolbar({
   authorCredit,
   urlPath,
   rawContent,
+  contentType = "poem",
   onFontSizeChange,
   onToneChange,
   className = "",
@@ -35,6 +37,8 @@ export function LetterpressReaderToolbar({
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg" | "xl">("base");
   const [tone, setTone] = useState<"parchment" | "sepia" | "night">("parchment");
   const [copied, setCopied] = useState(false);
+
+  const copyLabel = contentType === "poem" ? "Copy Verse" : "Copy Excerpt";
 
   const handleSizeCycle = () => {
     const next = fontSize === "sm" ? "base" : fontSize === "base" ? "lg" : fontSize === "lg" ? "xl" : "sm";
@@ -107,7 +111,8 @@ export function LetterpressReaderToolbar({
           type="button"
           onClick={handleCopy}
           className="px-2.5 py-1 rounded-full bg-white border border-[rgba(197,160,89,0.25)] text-xs font-sans font-medium text-[#182C25] hover:bg-[#F7F4EE] transition flex items-center gap-1 cursor-pointer"
-          title="Copy with verified author credit"
+          title={`Copy with verified author credit (${copyLabel})`}
+          aria-label={copied ? "Copied to clipboard" : copyLabel}
         >
           {copied ? (
             <>
@@ -117,7 +122,7 @@ export function LetterpressReaderToolbar({
           ) : (
             <>
               <Copy className="w-3 h-3 text-[#C5A059]" />
-              <span className="text-[11px] hidden sm:inline">Copy Verse</span>
+              <span className="text-[11px] hidden sm:inline">{copyLabel}</span>
             </>
           )}
         </button>

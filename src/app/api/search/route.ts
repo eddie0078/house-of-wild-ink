@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getAuthoritativeUrl } from "@/lib/taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -12,10 +13,7 @@ export async function GET(req: NextRequest) {
   const collections = db.getCollections(true);
 
   let results = items.map((item) => {
-    let url = `/stories/${item.slug}`;
-    if (item.content_type === "poem") url = `/poems/${item.slug}`;
-    if (item.content_type === "audio_story") url = `/audio-stories/${item.slug}`;
-    if (["essay", "article", "reflection"].includes(item.content_type)) url = `/essays/${item.slug}`;
+    const url = getAuthoritativeUrl(item);
 
     return {
       id: item.id,

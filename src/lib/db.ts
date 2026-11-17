@@ -905,6 +905,32 @@ class Database {
     return { success: true, message: "Welcome to House of Wild Ink. Your subscription has been confirmed." };
   }
 
+  unsubscribe(email: string): { success: boolean; message: string } {
+    const normalized = email.trim().toLowerCase();
+    const sub = this.data.subscribers.find((s) => s.email === normalized);
+    if (!sub) {
+      return { success: false, message: "This email address was not found in our dispatch register." };
+    }
+    if (!sub.is_active) {
+      return { success: true, message: "You are already unsubscribed from our dispatches." };
+    }
+    sub.is_active = false;
+    sub.unsubscribed_at = new Date().toISOString();
+    this.persist();
+    return { success: true, message: "You have been peacefully unsubscribed from the House of Wild Ink dispatches." };
+  }
+
+  deleteSubscriber(email: string): { success: boolean; message: string } {
+    const normalized = email.trim().toLowerCase();
+    const initialLen = this.data.subscribers.length;
+    this.data.subscribers = this.data.subscribers.filter((s) => s.email !== normalized);
+    if (this.data.subscribers.length < initialLen) {
+      this.persist();
+      return { success: true, message: "Your subscriber record has been completely expunged from our records." };
+    }
+    return { success: false, message: "Email not found in subscriber list." };
+  }
+
   // --- Contact Messages ---
   getMessages(): ContactMessage[] {
     return [...this.data.messages].sort(

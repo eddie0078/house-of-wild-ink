@@ -7,8 +7,11 @@ import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaCascading
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Poems",
+  title: "Poems & Verses",
   description: "Editorial poetry index by Linda Emefa Daniels (L.E. Daniels | DEFFA). Preserving exact poetic whitespace, meter, and stanza forms.",
+  alternates: {
+    canonical: "/poems",
+  },
 };
 
 export const dynamic = "force-dynamic";

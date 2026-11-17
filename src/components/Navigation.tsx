@@ -49,16 +49,16 @@ export function Navigation() {
   return (
     <header className="sticky top-0 z-40 bg-[#F7F4EE]/95 backdrop-blur-md border-b border-[rgba(197,160,89,0.3)] transition-colors shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
-        {/* Brand Logo & Wordmark with Floral Blossom (Sacred shrink-0) */}
+        {/* Brand Logo & Wordmark with Floral Blossom */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral rounded-lg p-1 shrink-0"
+          className="flex items-center gap-2 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral rounded-lg p-1 min-w-0 flex-1 sm:flex-initial"
         >
           <div className="relative shrink-0">
-            <BrandMark size={32} variant="dark" className="group-hover:scale-105 transition-transform" />
-            <span className="absolute -top-1 -right-1 text-[10px] text-[#C85A46] animate-pulse">🌸</span>
+            <BrandMark size={28} variant="dark" className="group-hover:scale-105 transition-transform sm:w-8 sm:h-8" />
+            <span className="absolute -top-1 -right-1 text-[9px] sm:text-[10px] text-[#C85A46] animate-pulse">🌸</span>
           </div>
-          <Wordmark size="md" showSignature={true} />
+          <Wordmark size="md" className="min-w-0" />
         </Link>
 
         {/* Desktop Navigation (Available on xl screens and wider with zero wrapping) */}
@@ -115,24 +115,27 @@ export function Navigation() {
 
         {/* Mobile & Tablet Actions (Screens under xl) */}
         <div className="flex items-center xl:hidden gap-1.5 sm:gap-2 shrink-0">
-          <BougainvilleaMoodSwitcher />
+          <div className="hidden sm:block">
+            <BougainvilleaMoodSwitcher />
+          </div>
 
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             className="p-2 rounded-full border border-[rgba(197,160,89,0.35)] bg-white text-[#182C25] hover:bg-brand-cream transition cursor-pointer"
             title="Search (⌘K)"
+            aria-label="Search literary archive"
           >
             <Search className="w-4 h-4 text-[#C5A059]" />
           </button>
 
           <Link
             href="/ink-room/gate"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-gold/50 text-brand-forest text-xs font-sans font-medium hover:bg-brand-forest hover:text-brand-cream transition-all"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-gold/50 text-brand-forest text-xs font-sans font-medium hover:bg-brand-forest hover:text-brand-cream transition-all"
             aria-label="The Ink Room Door"
           >
             <KeyRound className="w-3.5 h-3.5 text-brand-coral" />
-            <span className="hidden sm:inline">Ink Room</span>
+            <span>Ink Room</span>
           </Link>
 
           <button
@@ -149,7 +152,13 @@ export function Navigation() {
 
       {/* Accessible Mobile/Tablet Navigation Drawer */}
       {isOpen && (
-        <div className="xl:hidden border-b border-brand-gold/20 bg-brand-parchment px-4 pt-2 pb-6 space-y-1 shadow-lg animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="xl:hidden border-b border-brand-gold/20 bg-brand-parchment px-4 pt-3 pb-6 space-y-2 shadow-lg animate-in fade-in slide-in-from-top-4 duration-200">
+          {/* Mobile Palette Mood Switcher inside Drawer */}
+          <div className="sm:hidden flex items-center justify-between px-3 py-2 bg-brand-cream/80 rounded-xl border border-brand-gold/25 mb-3">
+            <span className="text-xs font-sans font-medium text-brand-forest">Floral Palette</span>
+            <BougainvilleaMoodSwitcher />
+          </div>
+
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (

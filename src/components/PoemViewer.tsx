@@ -38,7 +38,7 @@ export function PoemViewer({
     <article className={`tone-${tone} transition-colors duration-300 min-h-screen`}>
       <div className="max-w-3xl mx-auto px-6 py-12 sm:py-20">
         {/* Archival Print Broadside Header (Visible ONLY on print) */}
-        <div className="print-broadside-header">
+        <div className="print-broadside-header" aria-hidden="true">
           <div className="text-[10pt] uppercase tracking-widest text-[#C5A059] font-sans font-semibold">
             House of Wild Ink · Archival Broadside Edition
           </div>
@@ -57,6 +57,7 @@ export function PoemViewer({
             authorCredit={poem.author_credit}
             urlPath={`/poems/${poem.slug}`}
             rawContent={poem.raw_content}
+            contentType="poem"
             onFontSizeChange={(size) => setFontSize(size)}
             onToneChange={(newTone) => setTone(newTone)}
             className="w-full max-w-xl"

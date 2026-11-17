@@ -9,8 +9,11 @@ import { Feather, Download, ArrowRight, Sparkles, BookOpen, Headphones } from "l
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Linda Emefa Daniels — House of Wild Ink",
+  title: "About Linda Emefa Daniels",
   description: "Linda Emefa Daniels (L.E. Daniels | DEFFA) — Author and creator of House of Wild Ink. “A home for stories that refuse to stay quiet.”",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export const dynamic = "force-dynamic";

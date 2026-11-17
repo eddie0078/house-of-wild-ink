@@ -4,17 +4,23 @@ import { PublicShell } from "@/components/PublicShell";
 import { db } from "@/lib/db";
 import { BookOpen, Clock, ArrowRight, Theater } from "lucide-react";
 import { BougainvilleaBractCluster, BougainvilleaDivider, BougainvilleaCascadingVine } from "@/components/Bougainvillea";
+import { getPublicTypeLabel, getActionLabel } from "@/lib/taxonomy";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Stories & Short Dramas",
-  description: "Fiction, essays, short dramas, and prose by Linda Emefa Daniels from House of Wild Ink.",
+  description: "Illustrated novellas, short dramas, and prose fiction by Linda Emefa Daniels from House of Wild Ink.",
+  alternates: {
+    canonical: "/stories",
+  },
 };
 
 export const dynamic = "force-dynamic";
 
 export default function StoriesIndexPage() {
-  const stories = db.getContentItems({ status: "published" }).filter((i) => i.content_type !== "poem");
+  const stories = db
+    .getContentItems({ status: "published" })
+    .filter((i) => i.content_type === "story" || i.content_type === "short_drama");
   const collections = db.getCollections(true);
 
   return (
@@ -33,7 +39,7 @@ export default function StoriesIndexPage() {
             Stories & Short Dramas
           </h1>
           <p className="font-reading text-lg sm:text-xl text-brand-forest/80 leading-relaxed italic">
-            Long-form creative fiction, dialogue-driven chamber dramas, and quiet essays written for the open heart.
+            Long-form creative fiction, dialogue-driven chamber dramas, and quiet narratives written for the open heart.
           </p>
         </div>
 
@@ -45,6 +51,8 @@ export default function StoriesIndexPage() {
             {stories.map((story) => {
               const collection = collections.find((c) => c.id === story.collection_id);
               const isDrama = story.content_type === "short_drama";
+              const typeLabel = getPublicTypeLabel(story.content_type, story);
+              const actionLabel = getActionLabel(story.content_type);
 
               return (
                 <article
@@ -55,10 +63,10 @@ export default function StoriesIndexPage() {
                     <div className="flex items-center justify-between text-xs font-sans text-brand-forest/70 uppercase tracking-wider mb-4">
                       <span className="text-brand-coral font-semibold inline-flex items-center gap-1.5">
                         {isDrama ? <Theater className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
-                        {isDrama ? "Short Drama" : story.content_type}
+                        {typeLabel}
                       </span>
                       <span className="inline-flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
+                        <Clock className="w-3 h-3 text-brand-gold" />
                         {story.reading_time_minutes} min read
                       </span>
                     </div>
@@ -84,7 +92,7 @@ export default function StoriesIndexPage() {
                       href={`/stories/${story.slug}`}
                       className="inline-flex items-center gap-1 font-semibold text-brand-coral hover:text-brand-forest transition-colors"
                     >
-                      <span>Read {isDrama ? "Drama" : "Story"}</span>
+                      <span>{actionLabel}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>

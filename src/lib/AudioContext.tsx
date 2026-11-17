@@ -10,6 +10,7 @@ export interface AudioTrack {
   narrator?: string;
   duration?: string;
   coverUrl?: string;
+  audioUrl?: string;
   youtubeUrl?: string;
 }
 

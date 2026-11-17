@@ -106,7 +106,17 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-brand-gold/15 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-parchment/60 gap-4">
-          <p>© {new Date().getFullYear()} House of Wild Ink by Linda Emefa Daniels. All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <p>© {new Date().getFullYear()} House of Wild Ink by Linda Emefa Daniels. All rights reserved.</p>
+            <span className="hidden sm:inline text-brand-gold/40">•</span>
+            <Link href="/privacy" className="hover:text-brand-coral transition-colors underline underline-offset-2">
+              Privacy Sanctuary
+            </Link>
+            <span className="text-brand-gold/40">•</span>
+            <Link href="/unsubscribe" className="hover:text-brand-coral transition-colors underline underline-offset-2">
+              Unsubscribe
+            </Link>
+          </div>
           <p className="font-reading italic text-brand-parchment/70">
             Pen-name presentation: L.E. Daniels | DEFFA
           </p>

@@ -7,7 +7,7 @@ import { PublicShell } from "@/components/PublicShell";
 import { FloralDivider } from "@/components/FloralDivider";
 import { SoundwaveIcon } from "@/components/SoundwaveIcon";
 import { ShareControls } from "@/components/ShareControls";
-import { ArrowLeft, ExternalLink, Play, Clock, Sparkles } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Clock, Sparkles, FileText, AlertCircle } from "lucide-react";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -20,16 +20,21 @@ export async function generateMetadata({ params }: AudioStoryProps): Promise<Met
   const { slug } = await params;
   const item = db.getContentBySlug(slug);
   if (!item || item.content_type !== "audio_story") {
-    return { title: "Audio Story Not Found — House of Wild Ink" };
+    return { title: "Audio Story Not Found" };
   }
   return {
-    title: `${item.title} — Audio Story by Linda Emefa Daniels`,
+    title: `${item.title} — Spoken Word by Linda Emefa Daniels`,
     description: item.seo_description || item.excerpt,
+    alternates: {
+      canonical: `/audio-stories/${slug}`,
+    },
   };
 }
 
 function getYouTubeEmbedUrl(url?: string): string | null {
   if (!url) return null;
+  // If it's a channel link like @houseofwildink, it cannot be embedded as a video
+  if (url.includes("@") || url.includes("/channel/")) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
   return match && match[2].length === 11 ? `https://www.youtube-nocookie.com/embed/${match[2]}` : null;
@@ -45,7 +50,9 @@ export default async function AudioStoryDetailPage({ params }: AudioStoryProps) 
 
   const embedUrl = getYouTubeEmbedUrl(item.youtube_url);
   const coverUrl = item.cover_image_url || "/images/linda-emefa-daniels.jpg";
-  const youtubeUrl = item.youtube_url || "https://www.youtube.com";
+  const isChannel = Boolean(item.youtube_url?.includes("@") || item.youtube_url?.includes("channel"));
+  const hasAudioSource = Boolean(item.audio_url || embedUrl);
+  const isDramaScript = item.tags?.includes("Drama") || item.subtitle?.toLowerCase().includes("drama") || slug === "the-will";
 
   return (
     <PublicShell>
@@ -69,7 +76,7 @@ export default async function AudioStoryDetailPage({ params }: AudioStoryProps) 
         <div className="space-y-4 text-center max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[rgba(197,160,89,0.4)] bg-[#FAF8F5] text-xs font-sans text-[#182C25]">
             <Clock className="w-3.5 h-3.5 text-[#C85A46]" />
-            <span>{item.audio_duration || "Audio Recording"}</span>
+            <span>{item.audio_duration ? item.audio_duration : "Script in archive"}</span>
             <span className="text-[#C5A059]">•</span>
             <span>{item.narrator_credit ? `Narrated by ${item.narrator_credit}` : "Linda Emefa Daniels"}</span>
           </div>
@@ -87,7 +94,7 @@ export default async function AudioStoryDetailPage({ params }: AudioStoryProps) 
 
         <FloralDivider variant="flower" className="my-8" />
 
-        {/* Visual Cover & Player Box */}
+        {/* Visual Cover / Player / Truthful Status Box */}
         <div className="my-8 rounded-2xl overflow-hidden border-2 border-[rgba(197,160,89,0.35)] bg-[#FAF8F5] shadow-lg">
           {embedUrl ? (
             <div className="relative aspect-video w-full bg-black">
@@ -99,61 +106,58 @@ export default async function AudioStoryDetailPage({ params }: AudioStoryProps) 
                 allowFullScreen
               />
             </div>
-          ) : (
-            <div className="relative aspect-[21/9] w-full">
-              <Image
-                src={coverUrl}
-                alt={item.title}
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          ) : isChannel ? (
+            <div className="p-8 sm:p-12 text-center space-y-4 bg-gradient-to-b from-[#FAF8F5] to-stone-100">
+              <div className="w-14 h-14 rounded-full bg-[#D81E28]/10 text-[#D81E28] flex items-center justify-center mx-auto">
+                <SoundwaveIcon isPlaying={true} />
+              </div>
+              <h3 className="font-display text-2xl font-bold text-[#182C25]">
+                Spoken Word on YouTube
+              </h3>
+              <p className="font-reading text-base text-[#182C25]/85 max-w-lg mx-auto leading-relaxed">
+                Linda Emefa Daniels’ spoken reading for “{item.title}” is featured on our official YouTube channel. Stream audio performances and companion visual presentations directly.
+              </p>
+              <div className="pt-2">
                 <a
-                  href={youtubeUrl}
+                  href={item.youtube_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#C85A46] text-white font-medium hover:bg-[#b04a38] transition shadow-lg hover:scale-105 transform"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#D81E28] hover:bg-[#b51720] text-white text-xs font-semibold uppercase tracking-wider transition shadow-md cursor-pointer"
                 >
-                  <Play className="w-5 h-5 fill-white" />
-                  <span>Listen on YouTube Now</span>
-                  <ExternalLink className="w-4 h-4 opacity-80" />
+                  <span>Visit our YouTube channel</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="p-8 sm:p-12 text-center space-y-4 bg-gradient-to-b from-[#FAF8F5] to-stone-100">
+              <div className="w-14 h-14 rounded-full bg-stone-200 text-stone-600 flex items-center justify-center mx-auto">
+                <AlertCircle className="w-7 h-7 text-[#C5A059]" />
+              </div>
+              <h3 className="font-display text-2xl font-bold text-[#182C25]">
+                Audio Recording in Production
+              </h3>
+              <p className="font-reading text-base text-[#182C25]/85 max-w-lg mx-auto leading-relaxed">
+                The spoken audio performance for this piece is currently being produced. The complete three-scene dramatic script is available below for reading.
+              </p>
+              <div className="pt-2">
+                <a
+                  href="#literary-text"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#182C25] hover:bg-[#2D5A46] text-white text-xs font-semibold uppercase tracking-wider transition shadow-md cursor-pointer"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#DFC182]" />
+                  <span>Read Complete Script Below</span>
                 </a>
               </div>
             </div>
           )}
-
-          {/* Player Bar */}
-          <div className="p-4 sm:p-6 bg-[#FAF8F5] flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[rgba(197,160,89,0.2)]">
-            <div className="flex items-center gap-3">
-              <SoundwaveIcon isPlaying={true} />
-              <div>
-                <p className="font-sans text-xs font-semibold text-[#182C25]">
-                  Official YouTube Audio Stream
-                </p>
-                <p className="text-xs text-[#64746E]">
-                  Click to open full audio on YouTube in high fidelity
-                </p>
-              </div>
-            </div>
-
-            <a
-              href={youtubeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#C85A46] text-white text-xs font-semibold hover:bg-[#b04a38] transition shadow-sm hover:shadow cursor-pointer"
-            >
-              <Play className="w-3.5 h-3.5 fill-white" />
-              <span>Open on YouTube ↗</span>
-            </a>
-          </div>
         </div>
 
-        {/* Companion Reading Notes & Author's Reflection */}
-        <div className="bg-[#FAF8F5] border border-[rgba(197,160,89,0.3)] rounded-2xl p-6 sm:p-10 my-8 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#64746E] mb-4">
+        {/* Literary Text: Companion Notes vs Full Dramatic Script */}
+        <div id="literary-text" className="bg-[#FAF8F5] border border-[rgba(197,160,89,0.3)] rounded-2xl p-6 sm:p-10 my-8 shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#64746E] mb-6 pb-3 border-b border-[rgba(197,160,89,0.2)]">
             <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span>Companion Notes & Reflections</span>
+            <span>{isDramaScript ? "Complete Dramatic Script" : "Companion Author Notes & Reflections"}</span>
           </div>
 
           <div className="font-reading text-lg text-[#182C25] leading-relaxed space-y-4 whitespace-pre-line">
@@ -173,7 +177,7 @@ export default async function AudioStoryDetailPage({ params }: AudioStoryProps) 
           <div className="text-xs text-[#64746E]">
             <p>Spoken word piece written and performed by <span className="font-semibold text-[#182C25]">Linda Emefa Daniels</span></p>
           </div>
-          <ShareControls title={item.title} text={item.excerpt} />
+          <ShareControls title={item.title} text={item.excerpt} url={`https://houseofwildink.com/audio-stories/${item.slug}`} />
         </div>
       </article>
     </PublicShell>

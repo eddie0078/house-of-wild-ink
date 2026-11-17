@@ -31,13 +31,25 @@ import {
 } from "lucide-react";
 import { QuoteCarousel } from "@/components/QuoteCarousel";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "House of Wild Ink by Linda Emefa Daniels",
+  description: "A home for stories that refuse to stay quiet. Poems, stories, short dramas, and reflections by Linda Emefa Daniels (L.E. Daniels | DEFFA).",
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function HomePage() {
   const settings = db.getSettings();
   const featuredPoem = settings.featured_poem_id ? db.getContentById(settings.featured_poem_id) : undefined;
   const featuredStory = settings.featured_story_id ? db.getContentById(settings.featured_story_id) : undefined;
+  const startPoem = db.getContentBySlug("stones");
+  const startDrama = db.getContentBySlug("at-the-threshold");
+  const startLonger = db.getContentBySlug("taraji-says-no-to-plastic");
   const audioStories = db.getContentItems({ type: "audio_story", status: "published" }).slice(0, 3);
   const essays = db.getContentItems({ status: "published" }).filter((i) =>
     ["essay", "article", "reflection"].includes(i.content_type)
@@ -130,8 +142,35 @@ export default function HomePage() {
                 Step inside the open door. Here, poems, stories, spoken audio narratives, and quiet reflections find room to breathe among climbing bougainvillea blooms and sunlit bookshelves.
               </p>
 
+              {/* Primary Call to Action: Begin Reading directly after welcome */}
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <Link
+                  href="#start-here"
+                  className="px-8 py-3.5 rounded-full bg-[#D81E28] hover:bg-[#b51720] text-white font-sans font-semibold text-xs tracking-wider uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Begin Reading</span>
+                </Link>
+
+                <Link
+                  href="/audio-stories"
+                  className="px-6 py-3.5 rounded-full bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/20 text-[#FAF8F5] font-sans font-semibold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                >
+                  <Headphones className="w-4 h-4 text-[#DFC182]" />
+                  <span>Audio Stories</span>
+                </Link>
+
+                <Link
+                  href="/about"
+                  className="px-5 py-3.5 rounded-full text-xs font-serif text-[#DFC182] hover:text-white transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <span>Meet Linda</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
               {/* Multi-Color Bougainvillea Spectrum Pill Strip */}
-              <div className="flex items-center gap-2 pt-1 pb-1">
+              <div className="flex items-center gap-2 pt-2 pb-1">
                 <span className="text-[10px] uppercase tracking-widest font-serif text-[#DFC182]/80 mr-1">
                   Bougainvillea Bloom:
                 </span>
@@ -153,34 +192,6 @@ export default function HomePage() {
                 <span className="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-[#C5A059]/30">Wider</span>
                 <span className="text-[#FF6F59]">•</span>
                 <span className="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-[#C5A059]/30">Wiser</span>
-              </div>
-
-              {/* Interactive Action Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                <Link
-                  href="#featured"
-                  className="px-7 py-3.5 rounded-full bg-[#D81E28] hover:bg-[#b51720] text-white font-sans font-semibold text-xs tracking-wider uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  <span>Begin Reading</span>
-                </Link>
-
-                <Link
-                  href="/audio-stories"
-                  className="px-7 py-3.5 rounded-full bg-white/15 backdrop-blur-md hover:bg-white/25 border border-[#C5A059]/80 text-[#FAF8F5] font-sans font-semibold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <Headphones className="w-4 h-4 text-[#DFC182]" />
-                  <span>Audio Stories</span>
-                  <span className="text-[#FF6F59]">✿</span>
-                </Link>
-
-                <Link
-                  href="/about"
-                  className="px-5 py-3.5 rounded-full text-xs font-serif text-[#DFC182] hover:text-white transition-colors flex items-center justify-center gap-1.5"
-                >
-                  <span>Meet Linda</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
             </div>
           </div>
@@ -204,6 +215,144 @@ export default function HomePage() {
           </div>
 
           <FloralDivider variant="rose" className="mt-8 mb-0" />
+        </section>
+
+        {/* ======================================================== */}
+        {/* START HERE: THREE PORTALS (POEM, DRAMA, NOVELLA)         */}
+        {/* ======================================================== */}
+        <section id="start-here" className="py-20 px-6 max-w-7xl mx-auto scroll-mt-24">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[rgba(197,160,89,0.4)] bg-[#FAF8F5] text-xs font-serif text-[#D81E28]">
+              <BougainvilleaBractCluster color="crimson" size={18} />
+              <span className="tracking-widest uppercase text-[11px] font-semibold text-[#182C25]">
+                New Reader Invitation
+              </span>
+              <BougainvilleaBractCluster color="coral" size={18} />
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl text-[#182C25] font-bold">
+              Start Here: Three Portals Into the Garden
+            </h2>
+            <p className="font-reading italic text-base sm:text-lg text-[#64746E]">
+              Begin with an essential poem, a dialogue-driven chamber drama, or our feature illustrated novella.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* 1. The Essential Poem: Stones */}
+            {startPoem && (
+              <div className="floral-card rounded-2xl p-7 sm:p-8 flex flex-col justify-between border border-[rgba(197,160,89,0.3)] shadow-xs relative overflow-hidden group">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-sans uppercase tracking-wider text-[#64746E] mb-3">
+                    <span className="inline-flex items-center gap-1.5 text-[#D81E28] font-semibold">
+                      <Feather className="w-3.5 h-3.5" />
+                      Poem
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-[#C5A059]" />
+                      {startPoem.reading_time_minutes} min read
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-[#182C25] mb-1 group-hover:text-[#D81E28] transition-colors">
+                    <Link href={`/poems/${startPoem.slug}`}>{startPoem.title}</Link>
+                  </h3>
+                  <p className="text-xs font-serif text-[#C5A059] uppercase tracking-wider mb-4">
+                    From Stones & Quiet Fires
+                  </p>
+                  <p className="poetry-content text-[#182C25]/85 text-base leading-relaxed mb-6 line-clamp-4">
+                    {startPoem.raw_content}
+                  </p>
+                </div>
+                <div className="pt-5 border-t border-[rgba(197,160,89,0.2)] flex items-center justify-between">
+                  <span className="text-xs font-serif text-[#64746E]">{startPoem.author_credit}</span>
+                  <Link
+                    href={`/poems/${startPoem.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-[#D81E28] hover:text-[#182C25] transition-colors"
+                  >
+                    <span>Read Poem</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* 2. The Short Drama: At the Threshold */}
+            {startDrama && (
+              <div className="floral-card rounded-2xl p-7 sm:p-8 flex flex-col justify-between border border-[rgba(197,160,89,0.3)] shadow-xs relative overflow-hidden group">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-sans uppercase tracking-wider text-[#64746E] mb-3">
+                    <span className="inline-flex items-center gap-1.5 text-[#E0533C] font-semibold">
+                      <BookOpen className="w-3.5 h-3.5" />
+                      Short Drama
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-[#C5A059]" />
+                      {startDrama.reading_time_minutes} min read
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-[#182C25] mb-1 group-hover:text-[#E0533C] transition-colors">
+                    <Link href={`/stories/${startDrama.slug}`}>{startDrama.title}</Link>
+                  </h3>
+                  {startDrama.subtitle && (
+                    <p className="text-xs font-serif text-[#E0533C] mb-4 italic">
+                      {startDrama.subtitle}
+                    </p>
+                  )}
+                  <p className="font-reading text-[#182C25]/85 text-base leading-relaxed mb-6 line-clamp-4">
+                    {startDrama.excerpt}
+                  </p>
+                </div>
+                <div className="pt-5 border-t border-[rgba(197,160,89,0.2)] flex items-center justify-between">
+                  <span className="text-xs font-serif text-[#64746E]">{startDrama.author_credit}</span>
+                  <Link
+                    href={`/stories/${startDrama.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-[#E0533C] hover:text-[#182C25] transition-colors"
+                  >
+                    <span>Read Script</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* 3. The Long-Form Work: Taraji Says No to Plastic! */}
+            {startLonger && (
+              <div className="floral-card rounded-2xl p-7 sm:p-8 flex flex-col justify-between border border-[rgba(197,160,89,0.3)] shadow-xs relative overflow-hidden group">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-sans uppercase tracking-wider text-[#64746E] mb-3">
+                    <span className="inline-flex items-center gap-1.5 text-[#2D5A46] font-semibold">
+                      <BookOpen className="w-3.5 h-3.5" />
+                      Novella
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-[#C5A059]" />
+                      {startLonger.reading_time_minutes} min read
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-[#182C25] mb-1 group-hover:text-[#2D5A46] transition-colors">
+                    <Link href={`/stories/${startLonger.slug}`}>{startLonger.title}</Link>
+                  </h3>
+                  {startLonger.subtitle && (
+                    <p className="text-xs font-serif text-[#2D5A46] mb-4 italic">
+                      {startLonger.subtitle}
+                    </p>
+                  )}
+                  <p className="font-reading text-[#182C25]/85 text-base leading-relaxed mb-6 line-clamp-4">
+                    {startLonger.excerpt}
+                  </p>
+                </div>
+                <div className="pt-5 border-t border-[rgba(197,160,89,0.2)] flex items-center justify-between">
+                  <span className="text-xs font-serif text-[#64746E]">{startLonger.author_credit}</span>
+                  <Link
+                    href={`/stories/${startLonger.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-[#2D5A46] hover:text-[#182C25] transition-colors"
+                  >
+                    <span>Read Novella</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </section>
 
         {/* ======================================================== */}
@@ -338,7 +487,9 @@ export default function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {audioStories.map((audio, idx) => {
                   const cover = audio.cover_image_url || "/images/linda-emefa-daniels.jpg";
-                  const yt = audio.youtube_url || "https://www.youtube.com";
+                  const isChannel = Boolean(audio.youtube_url?.includes("@") || audio.youtube_url?.includes("channel"));
+                  const hasVideo = Boolean(audio.youtube_url && !isChannel);
+                  const hasDirectAudio = Boolean(audio.audio_url);
                   const colors: ("crimson" | "magenta" | "purple")[] = ["crimson", "magenta", "purple"];
                   const cardColor = colors[idx % colors.length];
 
@@ -356,23 +507,43 @@ export default function HomePage() {
                           sizes="(max-width: 768px) 100vw, 400px"
                         />
                         <div className="absolute inset-0 bg-black/35 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                          <a
-                            href={yt}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-13 h-13 rounded-full bg-[#D81E28] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
-                            aria-label={`Listen to ${audio.title} on YouTube`}
-                          >
-                            <Play className="w-5 h-5 fill-white ml-0.5" />
-                          </a>
+                          {isChannel ? (
+                            <a
+                              href={audio.youtube_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-2 rounded-full bg-[#D81E28] text-white text-xs font-semibold flex items-center gap-2 shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                              aria-label={`Visit our YouTube channel for ${audio.title}`}
+                            >
+                              <span>Visit our YouTube channel</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          ) : hasVideo ? (
+                            <a
+                              href={audio.youtube_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-13 h-13 rounded-full bg-[#D81E28] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
+                              aria-label={`Listen to ${audio.title} on YouTube`}
+                            >
+                              <Play className="w-5 h-5 fill-white ml-0.5" />
+                            </a>
+                          ) : (
+                            <Link
+                              href={`/stories/${audio.slug}`}
+                              className="px-4 py-2 rounded-full bg-[#182C25] text-white text-xs font-semibold flex items-center gap-2 shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                            >
+                              <span>Read Radio Script</span>
+                            </Link>
+                          )}
                         </div>
                         <div className="absolute top-3 left-3 bg-[#182C25]/85 backdrop-blur-xs text-white px-2.5 py-0.5 rounded-full text-[10px] flex items-center gap-1 font-sans">
                           <Clock className="w-2.5 h-2.5 text-[#C5A059]" />
-                          <span>{audio.audio_duration || "Audio"}</span>
+                          <span>{audio.audio_duration || "Script in archive"}</span>
                         </div>
                         <div className="absolute top-3 right-3 flex items-center gap-1.5">
                           <BougainvilleaBractCluster color={cardColor} size={24} className="filter drop-shadow-sm" />
-                          <SoundwaveIcon isPlaying={true} className="bg-white/85 backdrop-blur-xs rounded-md py-0.5 px-1.5" />
+                          <SoundwaveIcon isPlaying={hasDirectAudio || hasVideo} className="bg-white/85 backdrop-blur-xs rounded-md py-0.5 px-1.5" />
                         </div>
                       </div>
 
@@ -393,26 +564,51 @@ export default function HomePage() {
                         </div>
 
                         <div className="pt-4 border-t border-[rgba(197,160,89,0.2)] flex items-center justify-between gap-2">
-                          <AudioPlayButton
-                            track={{
-                              id: audio.id,
-                              title: audio.title,
-                              subtitle: audio.subtitle,
-                              narrator: audio.narrator_credit,
-                              coverUrl: cover,
-                              youtubeUrl: yt,
-                              duration: audio.audio_duration,
-                            }}
-                          />
-                          <a
-                            href={yt}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D81E28] text-white text-xs font-semibold hover:bg-[#b51720] transition shadow-xs cursor-pointer"
-                          >
-                            <Play className="w-3 h-3 fill-white" />
-                            <span>YouTube ↗</span>
-                          </a>
+                          {hasDirectAudio ? (
+                            <AudioPlayButton
+                              track={{
+                                id: audio.id,
+                                title: audio.title,
+                                slug: audio.slug,
+                                subtitle: audio.subtitle,
+                                narrator: audio.narrator_credit,
+                                coverUrl: cover,
+                                audioUrl: audio.audio_url,
+                                youtubeUrl: audio.youtube_url,
+                                duration: audio.audio_duration,
+                              }}
+                            />
+                          ) : isChannel ? (
+                            <a
+                              href={audio.youtube_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D81E28] text-white text-xs font-semibold hover:bg-[#b51720] transition shadow-xs cursor-pointer"
+                            >
+                              <span>Visit our YouTube channel</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          ) : hasVideo ? (
+                            <a
+                              href={audio.youtube_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D81E28] text-white text-xs font-semibold hover:bg-[#b51720] transition shadow-xs cursor-pointer"
+                            >
+                              <Play className="w-3 h-3 fill-white" />
+                              <span>Listen on YouTube</span>
+                            </a>
+                          ) : (
+                            <div className="flex items-center justify-between w-full">
+                              <span className="text-xs text-[#64746E] italic">Recording in production</span>
+                              <Link
+                                href={`/stories/${audio.slug}`}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#182C25] text-white text-xs font-semibold hover:bg-[#2D5A46] transition shadow-xs"
+                              >
+                                <span>Read Script</span>
+                              </Link>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

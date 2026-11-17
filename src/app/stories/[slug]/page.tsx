@@ -19,6 +19,9 @@ export async function generateMetadata({ params }: StoryPageProps): Promise<Meta
   return {
     title: story.seo_title || `${story.title} — ${story.content_type === "short_drama" ? "Short Drama" : "Story"}`,
     description: story.seo_description || story.excerpt,
+    alternates: {
+      canonical: `/stories/${slug}`,
+    },
     openGraph: {
       title: story.seo_title || `${story.title} by ${story.author_credit}`,
       description: story.seo_description || story.excerpt,

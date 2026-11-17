@@ -30,7 +30,7 @@ export function EssayReader({ item }: EssayReaderProps) {
     <article className={`tone-${tone} transition-colors duration-300 min-h-screen`}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         {/* Archival Print Broadside Header (Visible ONLY on print) */}
-        <div className="print-broadside-header">
+        <div className="print-broadside-header" aria-hidden="true">
           <div className="text-[10pt] uppercase tracking-widest text-[#C5A059] font-sans font-semibold">
             House of Wild Ink · Archival Essay Edition
           </div>
@@ -67,6 +67,7 @@ export function EssayReader({ item }: EssayReaderProps) {
             authorCredit={item.author_credit}
             urlPath={`/essays/${item.slug}`}
             rawContent={item.raw_content}
+            contentType={item.content_type}
             onFontSizeChange={(size) => setFontSize(size)}
             onToneChange={(newTone) => setTone(newTone)}
             className="w-full max-w-xl"

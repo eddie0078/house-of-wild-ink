@@ -8,6 +8,9 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "People & Profiles",
   description: "Contributors, collaborators, and writers connected to House of Wild Ink by Linda Emefa Daniels.",
+  alternates: {
+    canonical: "/people",
+  },
 };
 
 export const dynamic = "force-dynamic";

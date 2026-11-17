@@ -57,18 +57,24 @@ export function SearchModal({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Focus input when modal opens
+  // Focus restoration & input focusing
   useEffect(() => {
     if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
       setTimeout(() => inputRef.current?.focus(), 50);
       setSelectedIndex(0);
     } else {
       setQuery("");
+      if (previousFocusRef.current && typeof previousFocusRef.current.focus === "function") {
+        previousFocusRef.current.focus();
+      }
     }
   }, [isOpen]);
 
-  // Global keydown listeners for Escape & Arrow navigation
+  // Global keydown listeners for Escape, Arrow navigation, and Tab trap
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -86,6 +92,22 @@ export function SearchModal({
         e.preventDefault();
         router.push(results[selectedIndex].url);
         onClose();
+      } else if (e.key === "Tab" && dialogRef.current) {
+        // Focus trap inside search modal
+        const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length > 0) {
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
     };
 
@@ -132,6 +154,7 @@ export function SearchModal({
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         className="relative w-full max-w-2xl bg-[#FAF8F5] rounded-2xl border-2 border-[rgba(197,160,89,0.45)] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
@@ -153,12 +176,20 @@ export function SearchModal({
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search poems, stories, essays, audio recordings, or tags (e.g. faith, stones)..."
             className="w-full bg-transparent font-sans text-sm sm:text-base text-[#182C25] placeholder:text-[#64746E]/70 focus:outline-none"
+            aria-autocomplete="list"
+            aria-controls="search-results-list"
+            aria-activedescendant={results[selectedIndex] ? `search-result-${selectedIndex}` : undefined}
           />
           {query && (
             <button
               type="button"
-              onClick={() => setQuery("")}
-              className="p-1 rounded-md text-[#64746E] hover:text-[#182C25] cursor-pointer"
+              onClick={() => {
+                setQuery("");
+                inputRef.current?.focus();
+              }}
+              className="p-1.5 rounded-md text-[#64746E] hover:text-[#182C25] cursor-pointer"
+              aria-label="Clear search"
+              title="Clear search"
             >
               <X className="w-4 h-4" />
             </button>
@@ -168,13 +199,14 @@ export function SearchModal({
             onClick={onClose}
             className="p-1.5 rounded-lg border border-[rgba(197,160,89,0.3)] bg-white text-xs font-mono text-[#64746E] hover:bg-[#FAF8F5] cursor-pointer"
             title="Close Search (Esc)"
+            aria-label="Close search dialog"
           >
             ESC
           </button>
         </div>
 
         {/* Filter Pills */}
-        <div className="px-4 py-2.5 bg-[#FAF8F5] border-b border-[rgba(197,160,89,0.2)] flex items-center gap-1.5 overflow-x-auto text-xs">
+        <div className="px-4 py-2.5 bg-[#FAF8F5] border-b border-[rgba(197,160,89,0.2)] flex items-center gap-1.5 overflow-x-auto text-xs" role="toolbar" aria-label="Filter results by category">
           <span className="text-[10px] uppercase font-semibold text-[#64746E] tracking-wider shrink-0 mr-1">
             Filter:
           </span>
@@ -190,6 +222,7 @@ export function SearchModal({
               key={tab.id}
               type="button"
               onClick={() => setSelectedType(tab.id)}
+              aria-pressed={selectedType === tab.id}
               className={`px-3 py-1 rounded-full font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedType === tab.id
                   ? "bg-[#182C25] text-white shadow-xs"
@@ -202,15 +235,15 @@ export function SearchModal({
         </div>
 
         {/* Results Scroll Area */}
-        <div className="max-h-[60vh] overflow-y-auto p-3 space-y-1 divide-y divide-[rgba(197,160,89,0.15)]">
+        <div id="search-results-list" role="listbox" aria-label="Search results" className="max-h-[60vh] overflow-y-auto p-3 space-y-1 divide-y divide-[rgba(197,160,89,0.15)]">
           {isLoading && (
-            <div className="py-12 text-center text-xs text-[#64746E]">
+            <div className="py-12 text-center text-xs text-[#64746E]" role="status" aria-live="polite">
               Searching the House of Wild Ink archives...
             </div>
           )}
 
           {!isLoading && results.length === 0 && (
-            <div className="py-12 text-center space-y-2">
+            <div className="py-12 text-center space-y-2" role="status" aria-live="polite">
               <Sparkles className="w-8 h-8 text-[#C5A059] mx-auto opacity-70" />
               <p className="font-display font-semibold text-[#182C25] text-sm">
                 No literary works matched "{query}"
@@ -230,6 +263,9 @@ export function SearchModal({
               return (
                 <div
                   key={item.id}
+                  id={`search-result-${index}`}
+                  role="option"
+                  aria-selected={isSelected}
                   onClick={() => {
                     router.push(item.url);
                     onClose();

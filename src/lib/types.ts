@@ -55,6 +55,7 @@ export interface ContentItem {
   cover_media_id?: string;
   cover_image_url?: string;
   youtube_url?: string;
+  audio_url?: string;
   audio_duration?: string;
   narrator_credit?: string;
   social_media_id?: string;
@@ -202,6 +203,7 @@ export interface NewsletterSubscriber {
   source_page: string;
   is_active: boolean;
   subscribed_at: string;
+  unsubscribed_at?: string;
 }
 
 export type Subscriber = NewsletterSubscriber;

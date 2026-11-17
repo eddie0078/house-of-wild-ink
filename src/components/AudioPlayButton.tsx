@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useAudio, AudioTrack } from "@/lib/AudioContext";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, FileText } from "lucide-react";
 
 interface AudioPlayButtonProps {
   track: AudioTrack;
@@ -13,6 +14,21 @@ interface AudioPlayButtonProps {
 export function AudioPlayButton({ track, variant = "pill", className = "" }: AudioPlayButtonProps) {
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudio();
   const isCurrentPlaying = currentTrack?.id === track.id && isPlaying;
+
+  // Truthful audio guard: If no verified audio stream exists, do not offer fake playback
+  if (!track.audioUrl) {
+    if (variant === "icon") return null;
+    return (
+      <Link
+        href={track.slug ? `/stories/${track.slug}` : "/stories"}
+        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 border border-stone-300 text-[#64746E] hover:text-[#182C25] text-xs font-sans transition-colors cursor-pointer ${className}`}
+        title="Audio recording currently in production. Click to read script."
+      >
+        <FileText className="w-3 h-3 text-[#C5A059]" />
+        <span>Recording in production</span>
+      </Link>
+    );
+  }
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -60,7 +76,7 @@ export function AudioPlayButton({ track, variant = "pill", className = "" }: Aud
       ) : (
         <>
           <Play className="w-3 h-3 fill-[#D81E28] text-[#D81E28]" />
-          <span>Play Here</span>
+          <span>Play Audio</span>
         </>
       )}
     </button>

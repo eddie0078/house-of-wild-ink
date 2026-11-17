@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
   const validRanges = ["today", "7d", "30d", "all"] as const;
   const range = validRanges.includes(rangeParam as any) ? (rangeParam as "today" | "7d" | "30d" | "all") : "all";
 
-  const summary = db.getAnalyticsSummary(range);
+  const summary = await db.getAnalyticsSummaryAsync(range);
   return NextResponse.json(summary);
 }
 

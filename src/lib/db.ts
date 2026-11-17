@@ -34,8 +34,49 @@ interface DatabaseSchema {
   activeSessions: { token: string; email: string; role: string; expiresAt: number }[];
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const IS_VERCEL = process.env.VERCEL === "1" || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const BUNDLED_DB_FILE = path.join(process.cwd(), "data", "house_of_wild.json");
+const DATA_DIR = IS_VERCEL ? path.join("/tmp", "house_of_wild_data") : path.join(process.cwd(), "data");
 const DB_FILE = path.join(DATA_DIR, "house_of_wild.json");
+
+// Helper for Vercel KV / Upstash Redis persistence
+async function syncToCloudKV(key: string, value: any) {
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return;
+  try {
+    await fetch(`${url}/set/${key}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(typeof value === "string" ? value : JSON.stringify(value)),
+    });
+  } catch (e) {
+    console.warn("Cloud KV sync error:", e);
+  }
+}
+
+async function syncFromCloudKV<T>(key: string): Promise<T | null> {
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  try {
+    const res = await fetch(`${url}/get/${key}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    if (json && json.result) {
+      return typeof json.result === "string" ? JSON.parse(json.result) : json.result;
+    }
+  } catch (e) {
+    console.warn("Cloud KV read error:", e);
+  }
+  return null;
+}
 
 // Initial Linda Emefa Daniels verified data
 function getInitialSeed(): DatabaseSchema {
@@ -229,6 +270,13 @@ class Database {
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      if (IS_VERCEL && !fs.existsSync(DB_FILE) && fs.existsSync(BUNDLED_DB_FILE)) {
+        try {
+          fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+        } catch (e) {
+          console.warn("Could not copy bundled DB to /tmp:", e);
+        }
       }
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, "utf-8");
@@ -962,6 +1010,7 @@ class Database {
     }
 
     this.persist();
+    syncToCloudKV("house_of_wild_analytics", this.data.analytics).catch(() => {});
   }
 
   logPageView(path: string, contentType: string, engaged = false, shared = false): void {
@@ -991,6 +1040,7 @@ class Database {
       this.data.search_queries = this.data.search_queries.slice(0, 1000);
     }
     this.persist();
+    syncToCloudKV("house_of_wild_searches", this.data.search_queries).catch(() => {});
   }
 
   logInteraction(
@@ -1011,6 +1061,7 @@ class Database {
       this.data.interaction_events = this.data.interaction_events.slice(0, 2000);
     }
     this.persist();
+    syncToCloudKV("house_of_wild_interactions", this.data.interaction_events).catch(() => {});
   }
 
   getAnalyticsSummary(range: "today" | "7d" | "30d" | "all" = "all"): AnalyticsSummary {
@@ -1184,6 +1235,26 @@ class Database {
       },
       dailyBreakdown: [...records],
     };
+  }
+
+  async getAnalyticsSummaryAsync(range: "today" | "7d" | "30d" | "all" = "all"): Promise<AnalyticsSummary> {
+    try {
+      const cloudAnalytics = await syncFromCloudKV<DailyAnalytics[]>("house_of_wild_analytics");
+      if (cloudAnalytics && Array.isArray(cloudAnalytics)) {
+        this.data.analytics = cloudAnalytics;
+      }
+      const cloudSearches = await syncFromCloudKV<SearchQueryLog[]>("house_of_wild_searches");
+      if (cloudSearches && Array.isArray(cloudSearches)) {
+        this.data.search_queries = cloudSearches;
+      }
+      const cloudInteractions = await syncFromCloudKV<InteractionEventLog[]>("house_of_wild_interactions");
+      if (cloudInteractions && Array.isArray(cloudInteractions)) {
+        this.data.interaction_events = cloudInteractions;
+      }
+    } catch (e) {
+      console.warn("Error hydrating from cloud KV:", e);
+    }
+    return this.getAnalyticsSummary(range);
   }
 }
 

@@ -45,13 +45,14 @@ async function syncToCloudKV(key: string, value: any) {
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return;
   try {
-    await fetch(`${url}/set/${key}`, {
+    const rawVal = typeof value === "string" ? value : JSON.stringify(value);
+    await fetch(url, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(typeof value === "string" ? value : JSON.stringify(value)),
+      body: JSON.stringify(["SET", key, rawVal]),
     });
   } catch (e) {
     console.warn("Cloud KV sync error:", e);
@@ -63,8 +64,13 @@ async function syncFromCloudKV<T>(key: string): Promise<T | null> {
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
   try {
-    const res = await fetch(`${url}/get/${key}`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(["GET", key]),
       cache: "no-store",
     });
     if (!res.ok) return null;
